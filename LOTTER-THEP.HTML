@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หวยเทพ AI - เครื่องกำเนิดเลขหวยด้วย AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .ai-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 12px;
+            padding: 5px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .method-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .method-btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .method-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .method-btn:hover::before {
+            left: 100%;
+        }
+
+        .method-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .method-btn.active {
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+        }
+
+        .input-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group input, .input-group textarea, .input-group select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .file-upload input[type=file] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover .file-upload-label {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .ai-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .ai-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .ai-inputs input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        .ai-inputs input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .generate-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .action-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .load-btn {
+            background: linear-gradient(45deg, #17a2b8, #007bff);
+            color: white;
+        }
+
+        .clear-btn {
+            background: linear-gradient(45deg, #dc3545, #fd7e14);
+            color: white;
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            border-color: #667eea;
+        }
+
+        .result-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .numbers {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .number {
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2rem;
+            min-width: 55px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .number:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .confidence {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .algorithm-info {
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .history-display {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .method-selector, .input-section, .ai-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔮 หวยเทพ AI</h1>
+            <p class="subtitle">เครื่องกำเนิดเลขหวยด้วยปัญญาประดิษฐ์ขั้นสูง</p>
+            <div class="ai-badge">🤖 AI Powered</div>
+            <div class="ai-badge">📊 Big Data Analytics</div>
+            <div class="ai-badge">🧠 Machine Learning</div>
+        </div>
+
+        <div class="card">
+            <div class="tabs">
+                <div class="tab active" data-tab="generate">🎯 สร้างเลข</div>
+                <div class="tab" data-tab="history">📊 ประวัติผล</div>
+                <div class="tab" data-tab="ai">🤖 AI Assistant</div>
+                <div class="tab" data-tab="stats">📈 สถิติ</div>
+            </div>
+
+            <!-- Generate Tab -->
+            <div class="tab-content active" id="generate">
+                <h2>🎲 เลือกวิธีการคำนวณ</h2>
+                <div class="method-selector">
+                    <button class="method-btn active" data-method="fibonacci">🌀 Fibonacci</button>
+                    <button class="method-btn" data-method="prime">🔢 Prime Numbers</button>
+                    <button class="method-btn" data-method="statistical">📊 Statistical</button>
+                    <button class="method-btn" data-method="pattern">🔍 Pattern</button>
+                    <button class="method-btn" data-method="neural">🧠 Neural Net</button>
+                    <button class="method-btn" data-method="chaos">🌪️ Chaos Theory</button>
+                </div>
+
+                <div class="input-section">
+                    <div class="input-group">
+                        <label for="seedNumber">🎯 เลขเมล็ด:</label>
+                        <input type="number" id="seedNumber" placeholder="กรอกเลขเมล็ด" value="123456">
+                    </div>
+                    <div class="input-group">
+                        <label for="digitCount">📏 จำนวนหลัก:</label>
+                        <select id="digitCount">
+                            <option value="2">2 หลัก</option>
+                            <option value="3">3 หลัก</option>
+                            <option value="6" selected>6 หลัก</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="resultCount">🎲 จำนวนชุด:</label>
+                        <input type="number" id="resultCount" min="1" max="10" value="5">
+                    </div>
+                    <div class="input-group">
+                        <label for="luckNumber">🍀 เลขมงคล:</label>
+                        <input type="text" id="luckNumber" placeholder="เช่น 9, 13, 21">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="fileUpload">📁 อัพโหลดไฟล์ผลหวย:</label>
+                    <div class="file-upload">
+                        <input type="file" id="fileUpload" accept=".txt,.xlsx,.xls,.csv" multiple>
+                        <div class="file-upload-label">
+                            <span>📎 เลือกไฟล์ TXT, Excel, CSV</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="historyData">📝 หรือกรอกข้อมูลผลหวย:</label>
+                    <textarea id="historyData" rows="5" placeholder="กรอกผลหวยที่ผ่านมา แต่ละบรรทัด 1 ผล&#10;เช่น:&#10;123456&#10;789012&#10;345678"></textarea>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn save-btn" onclick="saveResults()">💾 บันทึกผล</button>
+                    <button class="action-btn load-btn" onclick="loadSavedResults()">📂 โหลดผล</button>
+                    <button class="action-btn clear-btn" onclick="clearAll()">🗑️ ล้างข้อมูล</button>
+                </div>
+
+                <button class="generate-btn" onclick="generateNumbers()">
+                    <span id="generateText">🎰 สร้างเลขหวย</span>
+                </button>
+
+                <div id="results" class="results"></div>
+            </div>
+
+            <!-- History Tab -->
+            <div class="tab-content" id="history">
+                <h2>📊 ประวัติผลหวยที่บันทึก</h2>
+                <div class="action-buttons">
+                    <button class="action-btn save-btn" onclick="exportHistory()">📤 Export ข้อมูล</button>
+                    <button class="action-btn clear-btn" onclick="clearHistory()">🗑️ ล้างประวัติ</button>
+                </div>
+                <div id="historyDisplay" class="history-display"></div>
+            </div>
+
+            <!-- AI Assistant Tab -->
+            <div class="tab-content" id="ai">
+                <div class="ai-section">
+                    <h2>🤖 AI Assistant</h2>
+                    <p>ใช้ Gemini AI และ OpenAI เพื่อวิเคราะห์และพยากรณ์เลขหวย</p>
+                    
+                    <div class="ai-inputs">
+                        <input type="password" id="geminiKey" placeholder="Gemini API Key">
+                        <input type="password" id="openaiKey" placeholder="OpenAI API Key">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>🎯 เลือก AI Model:</label>
+                        <select id="aiModel">
+                            <option value="gemini">Gemini Pro</option>
+                            <option value="openai">GPT-4</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>💬 คำถามหรือคำสั่งให้ AI:</label>
+                        <textarea id="aiPrompt" rows="3" placeholder="เช่น: วิเคราะห์แนวโน้มเลขหวยจากข้อมูลที่มี และแนะนำเลข 3 ตัวบน"></textarea>
+                    </div>
+                    
+                    <button class="generate-btn" onclick="askAI()" style="margin-top: 15px;">
+                        <span id="aiText">🧠 ถาม AI</span>
+                    </button>
+                </div>
+                
+                <div id="aiResponse" class="algorithm-info" style="display: none;">
+                    <h3>💡 คำตอบจาก AI:</h3>
+                    <div id="aiAnswer"></div>
+                </div>
+            </div>
+
+            <!-- Stats Tab -->
+            <div class="tab-content" id="stats">
+                <h2>📈 สถิติและการวิเคราะห์</h2>
+                <div class="stats-grid" id="statsGrid"></div>
+                <div id="frequencyChart" style="margin-top: 30px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        let currentMethod = 'fibonacci';
+        let lotteryHistory = JSON.parse(localStorage.getItem('lotteryHistory') || '[]');
+        let savedResults = JSON.parse(localStorage.getItem('savedResults') || '[]');
+        
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                
+                this.classList.add('active');
+                document.getElementById(this.getAttribute('data-tab')).classList.add('active');
+                
+                if (this.getAttribute('data-tab') === 'history') {
+                    updateHistoryDisplay();
+                } else if (this.getAttribute('data-tab') === 'stats') {
+                    updateStats();
+                }
+            });
+        });
+        
+        // Method selector functionality
+        document.querySelectorAll('.method-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentMethod = this.getAttribute('data-method');
+            });
+        });
+
+        // File upload functionality
+        document.getElementById('fileUpload').addEventListener('change', function(e) {
+            const files = e.target.files;
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    const extension = file.name.split('.').pop().toLowerCase();
+                    
+                    if (extension === 'xlsx' || extension === 'xls') {
+                        parseExcelFile(content);
+                    } else if (extension === 'csv') {
+                        parseCSVFile(content);
+                    } else if (extension === 'txt') {
+                        parseTxtFile(content);
+                    }
+                };
+                
+                if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+                    reader.readAsArrayBuffer(file);
+                } else {
+                    reader.readAsText(file, 'UTF-8');
+                }
+            }
+        });
+
+        function parseExcelFile(arrayBuffer) {
+            try {
+                const workbook = XLSX.read(arrayBuffer, {type: 'array'});
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const data = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+                
+                let numbers = [];
+                data.forEach(row => {
+                    if (row[0] && !isNaN(row[0])) {
+                        numbers.push(row[0].toString());
+                    }
+                });
+                
+                document.getElementById('historyData').value = numbers.join('\n');
+                showToast('อัพโหลดไฟล์ Excel สำเร็จ!');
+            } catch (error) {
+                showToast('เกิดข้อผิดพลาดในการอ่านไฟล์ Excel', 'error');
+            }
+        }
+
+        function parseCSVFile(content) {
+            try {
+                const lines = content.split('\n');
+                let numbers = [];
+                lines.forEach(line => {
+                    const cleanLine = line.trim();
+                    if (cleanLine && !isNaN(cleanLine)) {
+                        numbers.push(cleanLine);
+                    }
+                });
+                
+                document.getElementById('historyData').value = numbers.join('\n');
+                showToast('อัพโหลดไฟล์ CSV สำเร็จ!');
+            } catch (error) {
+                showToast('เกิดข้อผิดพลาดในการอ่านไฟล์ CSV', 'error');
+            }
+        }
+
+        function parseTxtFile(content) {
+            try {
+                const lines = content.split('\n');
+                let numbers = [];
+                lines.forEach(line => {
+                    const cleanLine = line.trim();
+                    if (cleanLine && !isNaN(cleanLine)) {
+                        numbers.push(cleanLine);
+                    }
+                });
+                
+                document.getElementById('historyData').value = numbers.join('\n');
+                showToast('อัพโหลดไฟล์ TXT สำเร็จ!');
+            } catch (error) {
+                showToast('เกิดข้อผิดพลาดในการอ่านไฟล์ TXT', 'error');
+            }
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        // Save and load functionality
+        function saveResults() {
+            const results = document.getElementById('results').innerHTML;
+            if (!results) {
+                showToast('ไม่มีผลลัพธ์ให้บันทึก', 'error');
+                return;
+            }
+            
+            const saveData = {
+                timestamp: new Date().toLocaleString('th-TH'),
+                method: currentMethod,
+                results: results,
+                settings: {
+                    seed: document.getElementById('seedNumber').value,
+                    digitCount: document.getElementById('digitCount').value,
+                    resultCount: document.getElementById('resultCount').value,
+                    luckNumber: document.getElementById('luckNumber').value
+                }
+            };
+            
+            savedResults.unshift(saveData);
+            localStorage.setItem('savedResults', JSON.stringify(savedResults));
+            showToast('บันทึกผลลัพธ์เรียบร้อย!');
+        }
+
+        function loadSavedResults() {
+            if (savedResults.length === 0) {
+                showToast('ไม่มีผลลัพธ์ที่บันทึกไว้', 'error');
+                return;
+            }
+            
+            const latest = savedResults[0];
+            document.getElementById('results').innerHTML = latest.results;
+            
+            // Load settings
+            document.getElementById('seedNumber').value = latest.settings.seed;
+            document.getElementById('digitCount').value = latest.settings.digitCount;
+            document.getElementById('resultCount').value = latest.settings.resultCount;
+            document.getElementById('luckNumber').value = latest.settings.luckNumber;
+            
+            showToast('โหลดผลลัพธ์เรียบร้อย!');
+        }
+
+        function clearAll() {
+            if (confirm('ต้องการล้างข้อมูลทั้งหมดหรือไม่?')) {
+                document.getElementById('historyData').value = '';
+                document.getElementById('results').innerHTML = '';
+                showToast('ล้างข้อมูลเรียบร้อย!');
+            }
+        }
+
+        // History management
+        function addToHistory(number) {
+            const historyItem = {
+                number: number,
+                timestamp: new Date().toLocaleString('th-TH'),
+                method: currentMethod
+            };
+            
+            lotteryHistory.unshift(historyItem);
+            localStorage.setItem('lotteryHistory', JSON.stringify(lotteryHistory));
+        }
+
+        function updateHistoryDisplay() {
+            const historyDiv = document.getElementById('historyDisplay');
+            if (lotteryHistory.length === 0) {
+                historyDiv.innerHTML = '<p style="text-align: center; color: #666;">ยังไม่มีประวัติผลหวย</p>';
+                return;
+            }
+            
+            historyDiv.innerHTML = lotteryHistory.map((item, index) => `
+                <div class="history-item">
+                    <div>
+                        <strong>${item.number}</strong>
+                        <br><small>วิธี: ${getMethodName(item.method)} | ${item.timestamp}</small>
+                    </div>
+                    <button class="delete-btn" onclick="deleteHistoryItem(${index})">ลบ</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteHistoryItem(index) {
+            lotteryHistory.splice(index, 1);
+            localStorage.setItem('lotteryHistory', JSON.stringify(lotteryHistory));
+            updateHistoryDisplay();
+            updateStats();
+            showToast('ลบรายการเรียบร้อย!');
+        }
+
+        function clearHistory() {
+            if (confirm('ต้องการล้างประวัติทั้งหมดหรือไม่?')) {
+                lotteryHistory = [];
+                localStorage.setItem('lotteryHistory', JSON.stringify(lotteryHistory));
+                updateHistoryDisplay();
+                updateStats();
+                showToast('ล้างประวัติเรียบร้อย!');
+            }
+        }
+
+        function exportHistory() {
+            if (lotteryHistory.length === 0) {
+                showToast('ไม่มีข้อมูลให้ Export', 'error');
+                return;
+            }
+            
+            const csvContent = 'เลข,วิธีการ,วันที่\n' + 
+                lotteryHistory.map(item => `${item.number},${getMethodName(item.method)},${item.timestamp}`).join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `หวยเทพAI_ประวัติ_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            
+            showToast('Export ข้อมูลเรียบร้อย!');
+        }
+
+        // AI Integration
+        async function askAI() {
+            const geminiKey = document.getElementById('geminiKey').value;
+            const openaiKey = document.getElementById('openaiKey').value;
+            const model = document.getElementById('aiModel').value;
+            const prompt = document.getElementById('aiPrompt').value;
+            
+            if (!prompt.trim()) {
+                showToast('กรุณากรอกคำถามให้ AI', 'error');
+                return;
+            }
+            
+            if (model === 'gemini' && !geminiKey) {
+                showToast('กรุณากรอก Gemini API Key', 'error');
+                return;
+            }
+            
+            if (model === 'openai' && !openaiKey) {
+                showToast('กรุณากรอก OpenAI API Key', 'error');
+                return;
+            }
+            
+            const aiButton = document.getElementById('aiText');
+            const originalText = aiButton.textContent;
+            aiButton.innerHTML = '<div class="loading"></div> กำลังวิเคราะห์...';
+            
+            try {
+                let response;
+                const historyContext = lotteryHistory.length > 0 ? 
+                    `ข้อมูลประวัติหวย: ${lotteryHistory.slice(0, 20).map(h => h.number).join(', ')}` : 
+                    'ไม่มีข้อมูลประวัติ';
+                
+                const fullPrompt = `${prompt}\n\nข้อมูลเพิ่มเติม: ${historyContext}`;
+                
+                if (model === 'gemini') {
+                    response = await callGeminiAPI(geminiKey, fullPrompt);
+                } else {
+                    response = await callOpenAIAPI(openaiKey, fullPrompt);
+                }
+                
+                document.getElementById('aiResponse').style.display = 'block';
+                document.getElementById('aiAnswer').innerHTML = formatAIResponse(response);
+                showToast('AI วิเคราะห์เสร็จแล้ว!');
+                
+            } catch (error) {
+                showToast('เกิดข้อผิดพลาดในการเชื่อมต่อ AI: ' + error.message, 'error');
+            } finally {
+                aiButton.textContent = originalText;
+            }
+        }
+
+        async function callGeminiAPI(apiKey, prompt) {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: prompt
+                        }]
+                    }]
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Gemini API Error: ' + response.statusText);
+            }
+            
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        async function callOpenAIAPI(apiKey, prompt) {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'gpt-4',
+                    messages: [{
+                        role: 'user',
+                        content: prompt
+                    }],
+                    max_tokens: 1000
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('OpenAI API Error: ' + response.statusText);
+            }
+            
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+
+        function formatAIResponse(response) {
+            return response
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>');
+        }
+
+        // Statistics
+        function updateStats() {
+            const statsGrid = document.getElementById('statsGrid');
+            
+            if (lotteryHistory.length === 0) {
+                statsGrid.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1 / -1;">ยังไม่มีข้อมูลสถิติ</p>';
+                return;
+            }
+            
+            // Calculate statistics
+            const totalNumbers = lotteryHistory.length;
+            const digitFreq = {};
+            const methodCount = {};
+            
+            lotteryHistory.forEach(item => {
+                // Count digit frequency
+                item.number.toString().split('').forEach(digit => {
+                    digitFreq[digit] = (digitFreq[digit] || 0) + 1;
+                });
+                
+                // Count method usage
+                methodCount[item.method] = (methodCount[item.method] || 0) + 1;
+            });
+            
+            const mostFrequentDigit = Object.entries(digitFreq).sort((a, b) => b[1] - a[1])[0];
+            const mostUsedMethod = Object.entries(methodCount).sort((a, b) => b[1] - a[1])[0];
+            
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${totalNumbers}</div>
+                    <div>ผลทั้งหมด</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${mostFrequentDigit ? mostFrequentDigit[0] : '-'}</div>
+                    <div>เลขที่ออกบ่อยสุด</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${getMethodName(mostUsedMethod ? mostUsedMethod[0] : '')}</div>
+                    <div>วิธีที่ใช้มากสุด</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${Object.keys(digitFreq).length}</div>
+                    <div>เลขที่แตกต่าง</div>
+                </div>
+            `;
+            
+            // Create frequency chart
+            createFrequencyChart(digitFreq);
+        }
+
+        function createFrequencyChart(digitFreq) {
+            const chartDiv = document.getElementById('frequencyChart');
+            
+            if (Object.keys(digitFreq).length === 0) {
+                chartDiv.innerHTML = '';
+                return;
+            }
+            
+            const maxFreq = Math.max(...Object.values(digitFreq));
+            
+            chartDiv.innerHTML = `
+                <h3>📊 ความถี่ของเลขแต่ละตัว</h3>
+                <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px; margin-top: 20px;">
+                    ${Array.from({length: 10}, (_, i) => {
+                        const freq = digitFreq[i] || 0;
+                        const height = maxFreq > 0 ? (freq / maxFreq) * 100 : 0;
+                        return `
+                            <div style="text-align: center;">
+                                <div style="background: linear-gradient(45deg, #667eea, #764ba2); height: ${height}px; margin-bottom: 5px; border-radius: 4px; min-height: 20px; display: flex; align-items: end; justify-content: center; color: white; font-size: 12px;">
+                                    ${freq > 0 ? freq : ''}
+                                </div>
+                                <div style="font-weight: bold;">${i}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function getMethodName(method) {
+            const methodNames = {
+                'fibonacci': 'Fibonacci',
+                'prime': 'Prime Numbers',
+                'statistical': 'Statistical',
+                'pattern': 'Pattern',
+                'neural': 'Neural Net',
+                'chaos': 'Chaos Theory'
+            };
+            return methodNames[method] || method;
+        }
+
+        // Mathematical functions for number generation (same as before)
+        class LotteryGenerator {
+            constructor() {
+                this.goldenRatio = (1 + Math.sqrt(5)) / 2;
+                this.pi = Math.PI;
+                this.e = Math.E;
+            }
+
+            fibonacci(n, seed) {
+                let fib = [seed % 100, (seed * 7) % 100];
+                for (let i = 2; i < n + 10; i++) {
+                    fib[i] = (fib[i-1] + fib[i-2]) % 100;
+                }
+                return fib.slice(2, n + 2);
+            }
+
+            isPrime(num) {
+                if (num < 2) return false;
+                for (let i = 2; i <= Math.sqrt(num); i++) {
+                    if (num % i === 0) return false;
+                }
+                return true;
+            }
+
+            generatePrimes(seed, count) {
+                let primes = [];
+                let num = Math.max(2, seed % 100);
+                while (primes.length < count) {
+                    if (this.isPrime(num)) {
+                        primes.push(num % 100);
+                    }
+                    num++;
+                    if (num > 1000) num = 2;
+                }
+                return primes;
+            }
+
+            statisticalAnalysis(history, seed, count) {
+                if (!history || history.length === 0) {
+                    return this.fibonacci(count, seed);
+                }
+
+                let digitFreq = {};
+                for (let i = 0; i <= 9; i++) digitFreq[i] = 0;
+
+                history.forEach(num => {
+                    num.toString().split('').forEach(digit => {
+                        digitFreq[digit]++;
+                    });
+                });
+
+                let sortedDigits = Object.entries(digitFreq)
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([digit, freq]) => parseInt(digit));
+
+                let results = [];
+                for (let i = 0; i < count; i++) {
+                    let weight = (seed + i * 13) % 100;
+                    results.push((sortedDigits[i % sortedDigits.length] * weight) % 100);
+                }
+                return results;
+            }
+
+            patternRecognition(history, seed, count) {
+                if (!history || history.length < 2) {
+                    return this.fibonacci(count, seed);
+                }
+
+                let patterns = [];
+                for (let i = 1; i < history.length; i++) {
+                    let diff = (history[i] - history[i-1]) % 100;
+                    if (diff < 0) diff += 100;
+                    patterns.push(diff);
+                }
+
+                let results = [];
+                let lastNum = history[history.length - 1] % 100;
+                
+                for (let i = 0; i < count; i++) {
+                    let patternIndex = (seed + i) % patterns.length;
+                    let nextNum = (lastNum + patterns[patternIndex] + i * 7) % 100;
+                    results.push(nextNum);
+                    lastNum = nextNum;
+                }
+                return results;
+            }
+
+            neuralNetwork(seed, count) {
+                let weights = [
+                    Math.sin(seed * 0.1) * 50,
+                    Math.cos(seed * 0.2) * 30,
+                    Math.tan(seed * 0.05) * 20
+                ];
+
+                let results = [];
+                for (let i = 0; i < count; i++) {
+                    let input = seed + i * 17;
+                    let output = 0;
+                    
+                    for (let j = 0; j < weights.length; j++) {
+                        output += Math.sin(input * weights[j] * 0.01) * 50;
+                    }
+                    
+                    results.push(Math.abs(Math.round(output)) % 100);
+                }
+                return results;
+            }
+
+            chaosTheory(seed, count) {
+                let x = (seed % 1000) / 1000;
+                let r = 3.7 + (seed % 100) / 1000;
+                let results = [];
+
+                for (let i = 0; i < count; i++) {
+                    x = r * x * (1 - x);
+                    let chaosNum = Math.floor(x * 100);
+                    results.push(chaosNum);
+                }
+                return results;
+            }
+
+            generateByMethod(method, seed, digitCount, resultCount, history, luckNumbers) {
+                let baseNumbers = [];
+                
+                switch(method) {
+                    case 'fibonacci':
+                        baseNumbers = this.fibonacci(resultCount * 2, seed);
+                        break;
+                    case 'prime':
+                        baseNumbers = this.generatePrimes(seed, resultCount * 2);
+                        break;
+                    case 'statistical':
+                        baseNumbers = this.statisticalAnalysis(history, seed, resultCount * 2);
+                        break;
+                    case 'pattern':
+                        baseNumbers = this.patternRecognition(history, seed, resultCount * 2);
+                        break;
+                    case 'neural':
+                        baseNumbers = this.neuralNetwork(seed, resultCount * 2);
+                        break;
+                    case 'chaos':
+                        baseNumbers = this.chaosTheory(seed, resultCount * 2);
+                        break;
+                    default:
+                        baseNumbers = this.fibonacci(resultCount * 2, seed);
+                }
+
+                let results = [];
+                for (let i = 0; i < resultCount; i++) {
+                    let number = '';
+                    for (let j = 0; j < digitCount; j++) {
+                        let digit = baseNumbers[(i * digitCount + j) % baseNumbers.length];
+                        
+                        if (luckNumbers.length > 0) {
+                            let luckInfluence = luckNumbers[j % luckNumbers.length];
+                            digit = (digit + luckInfluence) % 10;
+                        }
+                        
+                        number += digit.toString().slice(-1);
+                    }
+                    
+                    while (number.length < digitCount) {
+                        number = '0' + number;
+                    }
+                    
+                    results.push({
+                        number: number,
+                        confidence: this.calculateConfidence(method, baseNumbers, i),
+                        method: method
+                    });
+                }
+
+                return results;
+            }
+
+            calculateConfidence(method, baseNumbers, index) {
+                let baseConfidence = {
+                    'fibonacci': 85,
+                    'prime': 78,
+                    'statistical': 92,
+                    'pattern': 88,
+                    'neural': 82,
+                    'chaos': 75
+                };
+
+                let variance = Math.abs(baseNumbers[index] - 50) / 50 * 15;
+                return Math.max(60, Math.min(95, baseConfidence[method] - variance));
+            }
+        }
+
+        const generator = new LotteryGenerator();
+
+        function generateNumbers() {
+            const generateBtn = document.getElementById('generateText');
+            const originalText = generateBtn.textContent;
+            generateBtn.innerHTML = '<div class="loading"></div> กำลังคำนวณ...';
+            
+            setTimeout(() => {
+                const seed = parseInt(document.getElementById('seedNumber').value) || Date.now() % 1000000;
+                const digitCount = parseInt(document.getElementById('digitCount').value) || 6;
+                const resultCount = parseInt(document.getElementById('resultCount').value) || 5;
+                const luckNumbersStr = document.getElementById('luckNumber').value;
+                const historyStr = document.getElementById('historyData').value;
+
+                let luckNumbers = [];
+                if (luckNumbersStr) {
+                    luckNumbers = luckNumbersStr.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+                }
+
+                let history = [];
+                if (historyStr) {
+                    history = historyStr.split('\n')
+                        .map(line => parseInt(line.trim()))
+                        .filter(n => !isNaN(n));
+                }
+
+                const results = generator.generateByMethod(
+                    currentMethod, seed, digitCount, resultCount, history, luckNumbers
+                );
+
+                displayResults(results);
+                
+                // Add to history
+                results.forEach(result => {
+                    addToHistory(result.number);
+                });
+                
+                generateBtn.textContent = originalText;
+                showToast('สร้างเลขหวยเรียบร้อย!');
+            }, 1500);
+        }
+
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+            
+            const methodNames = {
+                'fibonacci': '🌀 Fibonacci Sequence',
+                'prime': '🔢 Prime Numbers',
+                'statistical': '📊 Statistical Analysis',
+                'pattern': '🔍 Pattern Recognition',
+                'neural': '🧠 Neural Network',
+                'chaos': '🌪️ Chaos Theory'
+            };
+
+            const methodDescriptions = {
+                'fibonacci': 'ใช้ลำดับฟีโบนักชีในการสร้างเลข โดยแต่ละเลขเป็นผลรวมของสองเลขก่อนหน้า',
+                'prime': 'ใช้จำนวนเฉพาะในการสร้างเลข เป็นจำนวนที่หารด้วยตัวเองและ 1 เท่านั้น',
+                'statistical': 'วิเคราะห์ความถี่ของเลขที่ออกในอดีต และใช้ข้อมูลนี้ในการพยากรณ์',
+                'pattern': 'ค้นหาแบบแผนในผลหวยที่ผ่านมา และใช้แบบแผนนี้ในการสร้างเลขใหม่',
+                'neural': 'จำลองการทำงานของโครงข่ายประสาทเทียม เพื่อเรียนรู้จากข้อมูล',
+                'chaos': 'ใช้ทฤษฎีความสับสน (Chaos Theory) ในการสร้างเลขที่ดูเหมือนสุ่มแต่มีระเบียบ'
+            };
+
+            resultsDiv.innerHTML = `
+                <div class="result-card" style="grid-column: 1 / -1;">
+                    <h3>🎯 ผลลัพธ์จาก ${methodNames[currentMethod]}</h3>
+                    <div class="numbers">
+                        ${results.map(result => `<div class="number">${result.number}</div>`).join('')}
+                    </div>
+                    <div class="confidence">
+                        ค่าความเชื่อมั่นเฉลี่ย: ${Math.round(results.reduce((sum, r) => sum + r.confidence, 0) / results.length)}%
+                    </div>
+                    <div class="algorithm-info">
+                        <strong>🔬 วิธีการ:</strong> ${methodDescriptions[currentMethod]}
+                        <br><strong>⏰ เวลาที่สร้าง:</strong> ${new Date().toLocaleString('th-TH')}
+                    </div>
+                </div>
+            `;
+
+            results.forEach((result, index) => {
+                resultsDiv.innerHTML += `
+                    <div class="result-card">
+                        <h3>✨ ชุดที่ ${index + 1}</h3>
+                        <div class="numbers">
+                            <div class="number" style="font-size: 1.5rem; min-width: auto; padding: 15px 20px;">
+                                ${result.number}
+                            </div>
+                        </div>
+                        <div class="confidence">
+                            🎯 ความเชื่อมั่น: ${Math.round(result.confidence)}%
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                            💫 โอกาสดี: ${result.confidence > 80 ? 'สูง' : result.confidence > 70 ? 'ปานกลาง' : 'พอใช้'}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Initialize app
+        window.addEventListener('load', () => {
+            updateHistoryDisplay();
+            updateStats();
+        });
+    </script>
+</body>
+</html>
