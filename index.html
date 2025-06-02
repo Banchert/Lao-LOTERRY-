@@ -1,514 +1,1728 @@
-# 🔮 หวยเทพ AI - คู่มือการติดตั้งและพัฒนา
-
-## 📋 สารบัญ
-- [วิธีการติดตั้งและรัน](#-วิธีการติดตั้งและรัน)
-- [ข้อกำหนดของระบบ](#-ข้อกำหนดของระบบ)
-- [การติดตั้งแบบง่าย](#-การติดตั้งแบบง่าย)
-- [การติดตั้งแบบมืออาชีพ](#-การติดตั้งแบบมืออาชีพ)
-- [การตั้งค่า API Keys](#-การตั้งค่า-api-keys)
-- [แนวทางการพัฒนาแบบขั้นตอน](#-แนวทางการพัฒนาแบบขั้นตอน)
-- [โครงสร้างโปรเจค](#-โครงสร้างโปรเจค)
-- [การ Deploy](#-การ-deploy)
-- [การแก้ไขปัญหา](#-การแก้ไขปัญหา)
-
----
-
-## 🚀 วิธีการติดตั้งและรัน
-
-### 📋 ข้อกำหนดของระบบ
-
-#### ความต้องการขั้นต่ำ:
-- ✅ เว็บเบราว์เซอร์ที่ทันสมัย (Chrome, Firefox, Safari, Edge)
-- ✅ JavaScript เปิดใช้งาน
-- ✅ อินเทอร์เน็ตสำหรับ AI API (ไม่บังคับ)
-
-#### สำหรับการพัฒนา:
-- 🔧 **Node.js** v16+ (แนะนำ v18+)
-- 🔧 **npm** หรือ **yarn**
-- 🔧 **Git**
-- 🔧 **VS Code** หรือ Text Editor อื่นๆ
-
----
-
-## ⚡ การติดตั้งแบบง่าย (สำหรับผู้ใช้ทั่วไป)
-
-### วิธีที่ 1: ใช้งานทันที (Instant)
-```bash
-# ดาวน์โหลดไฟล์ index.html
-# เปิดไฟล์ด้วยเว็บเบราว์เซอร์
-# ใช้งานได้เลย!
-```
-
-### วิธีที่ 2: สร้างโฟลเดอร์ใหม่
-```bash
-# สร้างโฟลเดอร์โปรเจค
-mkdir หวยเทพ-ai
-cd หวยเทพ-ai
-
-# สร้างไฟล์ index.html และคัดลอกโค้ด
-# เปิดไฟล์ด้วยเบราว์เซอร์
-```
-
-### วิธีที่ 3: ใช้ Live Server (แนะนำ)
-```bash
-# ติดตั้ง Live Server ผ่าน VS Code Extension
-# หรือใช้ Python
-python -m http.server 8000
-
-# เปิดเบราว์เซอร์ไปที่ http://localhost:8000
-```
-
----
-
-## 🏗️ การติดตั้งแบบมืออาชีพ (สำหรับนักพัฒนา)
-
-### 1. Clone Repository
-```bash
-git clone https://github.com/yourusername/lottery-ai.git
-cd lottery-ai
-```
-
-### 2. ติดตั้ง Dependencies
-```bash
-# สร้าง package.json
-npm init -y
-
-# ติดตั้ง development dependencies
-npm install --save-dev vite @vitejs/plugin-vanilla
-npm install --save-dev prettier eslint
-npm install --save-dev tailwindcss autoprefixer
-```
-
-### 3. สร้างไฟล์ package.json
-```json
-{
-  "name": "lottery-ai",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint . --ext js,html",
-    "format": "prettier --write ."
-  },
-  "devDependencies": {
-    "vite": "^5.0.0",
-    "@vitejs/plugin-vanilla": "^1.0.0",
-    "prettier": "^3.0.0",
-    "eslint": "^8.0.0"
-  }
-}
-```
-
-### 4. สร้าง vite.config.js
-```javascript
-import { defineConfig } from 'vite'
-
-export default defineConfig({
-  server: {
-    port: 3000,
-    open: true
-  },
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets'
-  }
-})
-```
-
-### 5. รันโปรเจค
-```bash
-# Development mode
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-```
-
----
-
-## 🔑 การตั้งค่า API Keys
-
-### 1. รับ API Keys
-
-#### Google Gemini API:
-1. ไปที่ [Google AI Studio](https://makersuite.google.com/)
-2. สร้าง API Key ใหม่
-3. คัดลอก API Key
-
-#### OpenAI API:
-1. ไปที่ [OpenAI Platform](https://platform.openai.com/)
-2. สร้าง API Key ใหม่
-3. คัดลอก API Key
-
-### 2. การใช้งาน API Keys
-
-#### วิธีที่ 1: ใส่ในหน้าเว็บ (Simple)
-```javascript
-// ใส่ API Key ในช่องที่กำหนดในหน้าเว็บ
-// ข้อมูลจะเก็บใน localStorage
-```
-
-#### วิธีที่ 2: Environment Variables (Advanced)
-```bash
-# สร้างไฟล์ .env
-VITE_GEMINI_API_KEY=your_gemini_api_key_here
-VITE_OPENAI_API_KEY=your_openai_api_key_here
-```
-
-```javascript
-// ใช้ในโค้ด
-const geminiKey = import.meta.env.VITE_GEMINI_API_KEY;
-const openaiKey = import.meta.env.VITE_OPENAI_API_KEY;
-```
-
-### 3. การรักษาความปลอดภัย API Keys
-```javascript
-// ✅ ถูกต้อง - ใช้ environment variables
-const apiKey = import.meta.env.VITE_API_KEY;
-
-// ❌ ผิด - เขียน API key ตรงในโค้ด
-const apiKey = "sk-1234567890abcdef";
-```
-
----
-
-## 🔧 แนวทางการพัฒนาแบบขั้นตอน
-
-### Phase 1: Foundation (สัปดาห์ที่ 1-2)
-```markdown
-✅ สร้างหน้า UI พื้นฐาน
-✅ ระบบสร้างเลขด้วยอัลกอริทึมง่ายๆ
-✅ ระบบบันทึกข้อมูลใน localStorage
-✅ Responsive Design
-
-📋 Tasks:
-- [ ] สร้าง HTML structure
-- [ ] เขียน CSS styling
-- [ ] สร้าง JavaScript functions พื้นฐาน
-- [ ] ทดสอบการทำงานในเบราว์เซอร์
-```
-
-### Phase 2: Core Features (สัปดาห์ที่ 3-4)
-```markdown
-✅ อัลกอริทึมสร้างเลขขั้นสูง (6 วิธี)
-✅ ระบบอัพโหลดไฟล์ (TXT, Excel, CSV)
-✅ การวิเคราะห์สถิติ
-✅ ระบบจัดการข้อมูล
-
-📋 Tasks:
-- [ ] Fibonacci algorithm
-- [ ] Prime numbers generator
-- [ ] Statistical analysis
-- [ ] Pattern recognition
-- [ ] File upload system
-- [ ] Data visualization
-```
-
-### Phase 3: AI Integration (สัปดาห์ที่ 5-6)
-```markdown
-✅ เชื่อมต่อ Gemini AI
-✅ เชื่อมต่อ OpenAI
-✅ ระบบแชทกับ AI
-✅ การวิเคราะห์ด้วย AI
-
-📋 Tasks:
-- [ ] API integration
-- [ ] Error handling
-- [ ] Response formatting
-- [ ] AI prompt optimization
-```
-
-### Phase 4: Advanced Features (สัปดาห์ที่ 7-8)
-```markdown
-✅ Neural Network simulation
-✅ Chaos Theory algorithm
-✅ Advanced statistics
-✅ Export/Import system
-
-📋 Tasks:
-- [ ] Complex algorithms
-- [ ] Data export features
-- [ ] Performance optimization
-- [ ] User experience improvements
-```
-
-### Phase 5: Polish & Deploy (สัปดาห์ที่ 9-10)
-```markdown
-✅ UI/UX refinements
-✅ Performance optimization
-✅ Error handling
-✅ Production deployment
-
-📋 Tasks:
-- [ ] Code refactoring
-- [ ] Performance testing
-- [ ] Browser compatibility
-- [ ] Documentation
-- [ ] Deployment setup
-```
-
----
-
-## 📁 โครงสร้างโปรเจค
-
-### รูปแบบ Simple (Single File)
-```
-หวยเทพ-ai/
-├── index.html          # ไฟล์หลัก (ทุกอย่างรวมกัน)
-├── README.md           # คู่มือการใช้งาน
-└── assets/
-    ├── images/         # รูปภาพ (ถ้ามี)
-    └── data/           # ไฟล์ข้อมูลตัวอย่าง
-```
-
-### รูปแบบ Professional (Modular)
-```
-หวยเทพ-ai/
-├── index.html
-├── package.json
-├── vite.config.js
-├── .env
-├── .gitignore
-├── README.md
-├── src/
-│   ├── js/
-│   │   ├── main.js
-│   │   ├── algorithms.js
-│   │   ├── ai-integration.js
-│   │   ├── file-handler.js
-│   │   ├── statistics.js
-│   │   └── ui-components.js
-│   ├── css/
-│   │   ├── main.css
-│   │   ├── components.css
-│   │   └── responsive.css
-│   └── assets/
-│       ├── images/
-│       └── data/
-├── dist/               # Production build
-└── docs/               # Documentation
-```
-
-### การแบ่งไฟล์ JavaScript
-```javascript
-// main.js - Entry point
-import { LotteryGenerator } from './algorithms.js';
-import { AIAssistant } from './ai-integration.js';
-import { FileHandler } from './file-handler.js';
-
-// algorithms.js - Mathematical algorithms
-export class LotteryGenerator {
-    fibonacci() { /* ... */ }
-    primeNumbers() { /* ... */ }
-    // ...
-}
-
-// ai-integration.js - AI API calls
-export class AIAssistant {
-    async callGemini() { /* ... */ }
-    async callOpenAI() { /* ... */ }
-}
-
-// file-handler.js - File upload/download
-export class FileHandler {
-    parseExcel() { /* ... */ }
-    parseCSV() { /* ... */ }
-    exportData() { /* ... */ }
-}
-```
-
----
-
-## 🌐 การ Deploy
-
-### 1. GitHub Pages (ฟรี)
-```bash
-# สร้าง repository ใน GitHub
-# Push โค้ดขึ้น GitHub
-# เปิดใช้งาน GitHub Pages ใน Settings
-
-# URL จะเป็น: https://username.github.io/repository-name
-```
-
-### 2. Netlify (ฟรี + ง่าย)
-```bash
-# 1. สร้างบัญชี Netlify
-# 2. เชื่อมต่อกับ GitHub repository
-# 3. Auto deploy เมื่อมีการ push
-
-# Build settings:
-# Build command: npm run build
-# Publish directory: dist
-```
-
-### 3. Vercel (ฟรี + เร็ว)
-```bash
-# ติดตั้ง Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-
-# การตั้งค่าสำหรับ Vite
-# Framework Preset: Vite
-# Build Command: npm run build
-# Output Directory: dist
-```
-
-### 4. Firebase Hosting (ฟรี + Google)
-```bash
-# ติดตั้ง Firebase CLI
-npm install -g firebase-tools
-
-# เข้าสู่ระบบ
-firebase login
-
-# เริ่มต้นโปรเจค
-firebase init hosting
-
-# Deploy
-firebase deploy
-```
-
----
-
-## 🐛 การแก้ไขปัญหา
-
-### ปัญหาที่พบบ่อย
-
-#### 1. ไฟล์ไม่โหลด
-```bash
-# ✅ วิธีแก้
-# ใช้ HTTP server แทนการเปิดไฟล์โดยตรง
-python -m http.server 8000
-# หรือ
-npx serve .
-```
-
-#### 2. API ไม่ทำงาน
-```javascript
-// ❌ ปัญหา: CORS error
-fetch('https://api.openai.com/v1/chat/completions')
-
-// ✅ วิธีแก้: ใช้ proxy หรือ backend
-// หรือใช้ browser extension สำหรับ development
-```
-
-#### 3. Excel ไม่อ่านได้
-```javascript
-// ❌ ปัญหา: ไม่ได้โหลด SheetJS
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-// ✅ วิธีแก้: เพิ่ม script tag ก่อน JavaScript
-```
-
-#### 4. ข้อมูลหาย
-```javascript
-// ❌ ปัญหา: localStorage เต็ม
-// ✅ วิธีแก้: เพิ่มการตรวจสอบ
-try {
-    localStorage.setItem('data', JSON.stringify(data));
-} catch (e) {
-    console.error('Storage full:', e);
-    // จัดการข้อมูลเก่า
-}
-```
-
-### Debug Tools
-```javascript
-// เปิด Developer Console
-console.log('Debug info:', data);
-
-// ตรวจสอบ localStorage
-console.log('Stored data:', localStorage.getItem('lotteryHistory'));
-
-// ตรวจสอบ API response
-fetch(url).then(r => r.json()).then(console.log);
-```
-
----
-
-## 📚 Resources และเอกสารอ้างอิง
-
-### Documentation
-- [MDN Web Docs](https://developer.mozilla.org/)
-- [Vite Guide](https://vitejs.dev/guide/)
-- [Google AI Studio](https://makersuite.google.com/)
-- [OpenAI API Docs](https://platform.openai.com/docs)
-
-### Libraries ที่ใช้
-- [SheetJS](https://sheetjs.com/) - Excel file handling
-- [Chart.js](https://www.chartjs.org/) - Data visualization
-- [Prettier](https://prettier.io/) - Code formatting
-- [ESLint](https://eslint.org/) - Code linting
-
-### แหล่งเรียนรู้
-- [JavaScript.info](https://javascript.info/)
-- [CSS-Tricks](https://css-tricks.com/)
-- [Web.dev](https://web.dev/)
-
----
-
-## 🤝 การมีส่วนร่วม (Contributing)
-
-### การส่ง Pull Request
-1. Fork repository
-2. สร้าง feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. เปิด Pull Request
-
-### Code Style
-```javascript
-// ใช้ camelCase สำหรับตัวแปร
-const lotteryNumber = 123456;
-
-// ใช้ PascalCase สำหรับ Class
-class LotteryGenerator {
-    // ...
-}
-
-// ใช้ kebab-case สำหรับ CSS class
-.lottery-card {
-    /* ... */
-}
-```
-
----
-
-## 📄 License
-
-MIT License - ใช้งานได้อย่างอิสระสำหรับโปรเจคส่วนตัวและเชิงพาณิชย์
-
----
-
-## 📞 ติดต่อและสนับสนุน
-
-- 💬 **Issues**: [GitHub Issues](https://github.com/yourusername/lottery-ai/issues)
-- 📧 **Email**: your.email@example.com
-- 💻 **Website**: https://your-website.com
-
----
-
-## 🎯 Roadmap
-
-### Version 2.0 (Q2 2025)
-- [ ] Mobile App (React Native)
-- [ ] Backend API (Node.js)
-- [ ] User Authentication
-- [ ] Premium Features
-
-### Version 3.0 (Q4 2025)
-- [ ] Machine Learning Models
-- [ ] Real-time Data Sync
-- [ ] Social Features
-- [ ] Advanced Analytics
-
----
-
-**Made with ❤️ by Thai Developers for Thai People**
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หวยเทพ AI - เครื่องกำเนิดเลขหวยด้วย AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .ai-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 12px;
+            padding: 5px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .method-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .method-btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .method-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .method-btn:hover::before {
+            left: 100%;
+        }
+
+        .method-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .method-btn.active {
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+        }
+
+        .input-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group input, .input-group textarea, .input-group select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .input-group button { /* For the add history button */
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #17a2b8, #007bff);
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 5px; /* Add some space if needed */
+        }
+        .input-group button:hover {
+            opacity: 0.9;
+        }
+
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .file-upload input[type=file] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover .file-upload-label {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .ai-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .ai-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .ai-inputs input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        .ai-inputs input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .generate-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .action-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .load-btn {
+            background: linear-gradient(45deg, #17a2b8, #007bff);
+            color: white;
+        }
+
+        .clear-btn {
+            background: linear-gradient(45deg, #dc3545, #fd7e14);
+            color: white;
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            border-color: #667eea;
+        }
+
+        .result-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .numbers {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .number {
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2rem;
+            min-width: 55px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .number:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .confidence {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .algorithm-info {
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .history-display {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .method-selector, .input-section, .ai-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔮 หวยเทพ AI</h1>
+            <p class="subtitle">เครื่องกำเนิดเลขหวยด้วยปัญญาประดิษฐ์ขั้นสูง</p>
+            <div class="ai-badge">🤖 AI Powered</div>
+            <div class="ai-badge">📊 Big Data Analytics</div>
+            <div class="ai-badge">🧠 Machine Learning</div>
+        </div>
+
+        <div class="card">
+            <div class="tabs">
+                <div class="tab active" data-tab="generate">🎯 สร้างเลข</div>
+                <div class="tab" data-tab="history">📊 ประวัติผล</div>
+                <div class="tab" data-tab="ai">🤖 AI Assistant</div>
+                <div class="tab" data-tab="stats">📈 สถิติ</div>
+            </div>
+
+            <div class="tab-content active" id="generate">
+                <h2>🎲 เลือกวิธีการคำนวณ</h2>
+                <div class="method-selector">
+                    <button class="method-btn active" data-method="fibonacci">🌀 จอมขมังเวทย์</button>
+                    <button class="method-btn" data-method="prime">🔢 หมอเลข</button>
+                    <button class="method-btn" data-method="statistical">📊 เทพสถิติ</button>
+                    <button class="method-btn" data-method="pattern">🔍 เซียนจับทาง</button>
+                    <button class="method-btn" data-method="neural">🧠 ปัญญาเทพ</button>
+                    <button class="method-btn" data-method="chaos">🌪️ พลังสุ่มจักรวาล</button>
+                </div>
+
+                <div class="input-section">
+                    <div class="input-group">
+                        <label for="seedNumber">🎯 เลขเมล็ด:</label>
+                        <input type="number" id="seedNumber" placeholder="กรอกเลขเมล็ด" value="123456">
+                    </div>
+                    <div class="input-group">
+                        <label for="digitCount">📏 จำนวนหลัก:</label>
+                        <select id="digitCount">
+                            <option value="2">2 หลัก</option>
+                            <option value="3">3 หลัก</option>
+                            <option value="6" selected>6 หลัก</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="resultCount">🎲 จำนวนชุด:</label>
+                        <input type="number" id="resultCount" min="1" max="10" value="5">
+                    </div>
+                    <div class="input-group">
+                        <label for="luckNumber">🍀 เลขมงคล:</label>
+                        <input type="text" id="luckNumber" placeholder="เช่น 9, 13, 21">
+                    </div>
+                </div>
+                
+                <hr style="margin: 20px 0; border-color: rgba(0,0,0,0.1);">
+                <h3>📜 ข้อมูลสถิติผลหวยสำหรับใช้คำนวณ</h3>
+
+                <div class="input-group">
+                    <label for="historicalDataSource">📊 แหล่งข้อมูลสถิติ:</label>
+                    <select id="historicalDataSource">
+                        <option value="manual" selected>📝 กรอกข้อมูลด้วยตนเอง / อัปโหลดไฟล์</option>
+                        <option value="saved">💾 ใช้ผลที่เคยสร้างและบันทึกไว้</option>
+                    </select>
+                </div>
+
+                <div class="input-group" id="savedSetsOptions" style="display: none;">
+                    <label for="numSavedSetsToUse">🔢 จำนวนชุดผลลัพธ์ที่เคยบันทึกไว้จะนำมาใช้:</label>
+                    <input type="number" id="numSavedSetsToUse" min="1" value="5">
+                </div>
+                
+                <div class="input-group">
+                    <label for="fileUpload">📁 อัพโหลดไฟล์ผลหวย (TXT, Excel, CSV):</label>
+                    <div class="file-upload">
+                        <input type="file" id="fileUpload" accept=".txt,.xlsx,.xls,.csv" multiple>
+                        <div class="file-upload-label">
+                            <span>📎 เลือกไฟล์</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>📝 หรือกรอกข้อมูลผลหวยด้วยตนเอง:</label>
+                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <input type="date" id="manualHistoryDate" style="flex: 1;">
+                        <input type="text" id="manualHistoryNumber" placeholder="กรอกเลขผลหวย" style="flex: 2;">
+                        <button onclick="addManualHistoryEntry()" style="padding: 10px 15px;">➕ เพิ่ม</button>
+                    </div>
+                    <textarea id="historyData" rows="5" placeholder="กรอกผลหวยที่ผ่านมา แต่ละบรรทัด 1 ผล&#10;เช่น:&#10;22-03-2024=152858&#10;152858&#10;01-03-2024=789012&#10;345678"></textarea>
+                </div>
+                <hr style="margin: 20px 0; border-color: rgba(0,0,0,0.1);">
+
+
+                <div class="action-buttons">
+                    <button class="action-btn save-btn" onclick="saveCurrentResults()">💾 บันทึกผล</button>
+                    <button class="action-btn load-btn" onclick="loadSavedResults()">📂 โหลดผล</button>
+                    <button class="action-btn clear-btn" onclick="clearAllInputs()">🗑️ ล้างข้อมูล</button>
+                </div>
+
+                <button class="generate-btn" onclick="generateNumbers()">
+                    <span id="generateText">🎰 สร้างเลขหวย</span>
+                </button>
+
+                <div id="results" class="results"></div>
+            </div>
+
+            <div class="tab-content" id="history">
+                <h2>📊 ประวัติผลหวยที่สร้างและบันทึกไว้</h2>
+                <div class="action-buttons">
+                    <button class="action-btn save-btn" onclick="exportHistory()">📤 Export ข้อมูล</button>
+                    <button class="action-btn clear-btn" onclick="clearLotteryHistory()">🗑️ ล้างประวัติ</button>
+                </div>
+                <div id="historyDisplay" class="history-display"></div>
+            </div>
+
+            <div class="tab-content" id="ai">
+                <div class="ai-section">
+                    <h2>🤖 AI Assistant</h2>
+                    <p>ใช้ Gemini AI และ OpenAI เพื่อวิเคราะห์และพยากรณ์เลขหวย</p>
+                    
+                    <div class="ai-inputs">
+                        <input type="password" id="geminiKey" placeholder="Gemini API Key">
+                        <input type="password" id="openaiKey" placeholder="OpenAI API Key">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>🎯 เลือก AI Model:</label>
+                        <select id="aiModel">
+                            <option value="gemini">Gemini Pro</option>
+                            <option value="openai">GPT-4</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>💬 คำถามหรือคำสั่งให้ AI:</label>
+                        <textarea id="aiPrompt" rows="3" placeholder="เช่น: วิเคราะห์แนวโน้มเลขหวยจากข้อมูลที่มี และแนะนำเลข 3 ตัวบน"></textarea>
+                    </div>
+                    
+                    <button class="generate-btn" onclick="askAI()" style="margin-top: 15px;">
+                        <span id="aiText">🧠 ถาม AI</span>
+                    </button>
+                </div>
+                
+                <div id="aiResponse" class="algorithm-info" style="display: none;">
+                    <h3>💡 คำตอบจาก AI:</h3>
+                    <div id="aiAnswer"></div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="stats">
+                <h2>📈 สถิติและการวิเคราะห์ (จากเลขที่สร้างและบันทึกไว้)</h2>
+                <div class="stats-grid" id="statsGrid"></div>
+                <div id="frequencyChart" style="margin-top: 30px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        let currentMethod = 'fibonacci';
+        // lotteryHistory stores individual numbers generated for stats and history tab
+        let lotteryHistory = JSON.parse(localStorage.getItem('lotteryHistory') || '[]'); 
+        // savedResultsData stores SETS of generated numbers, along with their settings
+        let savedResultsData = JSON.parse(localStorage.getItem('savedResultsData') || '[]');
+        // currentGeneratedSet stores the numbers displayed in the "results" div from the latest generation
+        let currentGeneratedSet = []; 
+
+
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                
+                this.classList.add('active');
+                document.getElementById(this.getAttribute('data-tab')).classList.add('active');
+                
+                if (this.getAttribute('data-tab') === 'history') {
+                    updateLotteryHistoryDisplay();
+                } else if (this.getAttribute('data-tab') === 'stats') {
+                    updateStats();
+                }
+            });
+        });
+        
+        // Method selector functionality
+        document.querySelectorAll('.method-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentMethod = this.getAttribute('data-method');
+            });
+        });
+
+        // Historical Data Source Selector
+        document.getElementById('historicalDataSource').addEventListener('change', function() {
+            const savedSetsOptions = document.getElementById('savedSetsOptions');
+            if (this.value === 'saved') {
+                savedSetsOptions.style.display = 'block';
+            } else {
+                savedSetsOptions.style.display = 'none';
+            }
+        });
+
+        // START: NEW AND MODIFIED FUNCTIONS 
+        // ==================================
+
+        // New helper function to parse DD-MM-YYYY date strings
+        function parseDateString(dateStr) { // DD-MM-YYYY
+            if (!dateStr) return null;
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                const day = parseInt(parts[0], 10);
+                const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed in JS Date
+                const year = parseInt(parts[2], 10);
+                if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+                     // Basic validation for year range, can be adjusted
+                    if (year < 1900 || year > 2100) return null;
+                    const d = new Date(year, month, day);
+                    if (d.getFullYear() === year && d.getMonth() === month && d.getDate() === day) {
+                        return d;
+                    }
+                }
+            }
+            return null;
+        }
+
+        // New helper function to parse history data text (from textarea)
+        function parseHistoryDataText(rawHistoryText) {
+            const lines = rawHistoryText.split('\n');
+            const parsedItems = [];
+            // Regex to match DD-MM-YYYY=NUMBER
+            // It allows for 1 or 2 digits for day/month and 4 for year.
+            const datePattern = /^(\d{1,2}-\d{1,2}-\d{4})=(\d+)$/;
+
+            lines.forEach(line => {
+                line = line.trim();
+                if (!line) return;
+
+                const match = line.match(datePattern);
+                if (match) {
+                    const dateStr = match[1];
+                    const numberStr = match[2];
+                    const dateObj = parseDateString(dateStr); // parseDateString expects DD-MM-YYYY
+
+                    if (dateObj && numberStr.match(/^\d+$/)) {
+                        parsedItems.push({ date: dateObj, number: numberStr, originalLine: line });
+                    } else if (numberStr.match(/^\d+$/)) { 
+                        // If date was invalid but number is fine, currently not adding it as dated entry.
+                        // To keep number-only part: parsedItems.push({ date: null, number: numberStr, originalLine: line });
+                    }
+                } else if (line.match(/^\d+$/)) { // Simple number line
+                    parsedItems.push({ date: null, number: line, originalLine: line });
+                }
+            });
+            return parsedItems;
+        }
+
+        // New helper function to get sorted history for calculation (latest N draws)
+        function getHistoryForCalculation(rawHistoryText, numberOfLatestDraws) {
+            const parsedItems = parseHistoryDataText(rawHistoryText);
+
+            const datedItems = parsedItems.filter(item => item.date !== null);
+            const nonDatedItems = parsedItems.filter(item => item.date === null);
+
+            // Sort dated items: most recent first (descending date order)
+            datedItems.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+            const allProcessableItems = [...datedItems, ...nonDatedItems];
+
+            let selectedItems;
+            if (numberOfLatestDraws > 0 && allProcessableItems.length > 0) {
+                selectedItems = allProcessableItems.slice(0, numberOfLatestDraws);
+            } else if (allProcessableItems.length > 0) { // if numberOfLatestDraws is 0 or not positive, use all
+                selectedItems = allProcessableItems;
+            } else {
+                selectedItems = [];
+            }
+            return selectedItems.map(item => item.number);
+        }
+
+
+        // Modified addManualHistoryEntry function
+        function addManualHistoryEntry() {
+            const dateInput = document.getElementById('manualHistoryDate');
+            const numberInput = document.getElementById('manualHistoryNumber');
+            const historyDataTextarea = document.getElementById('historyData');
+
+            const dateValue = dateInput.value; // This will be in YYYY-MM-DD format from <input type="date">
+            const numberValue = numberInput.value.trim();
+
+            if (!numberValue || !numberValue.match(/^\d+$/)) {
+                showToast('กรุณากรอกเลขผลหวยที่ถูกต้อง (เฉพาะตัวเลข)', 'error');
+                return;
+            }
+
+            let entry = numberValue;
+            if (dateValue) { // dateValue is YYYY-MM-DD
+                const dateParts = dateValue.split('-'); // [YYYY, MM, DD]
+                if (dateParts.length === 3) {
+                    // Convert YYYY-MM-DD to DD-MM-YYYY for consistency
+                    const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+                    entry = `${formattedDate}=${numberValue}`;
+                }
+            }
+
+            if (historyDataTextarea.value.trim() === '') {
+                historyDataTextarea.value = entry;
+            } else {
+                historyDataTextarea.value += '\n' + entry;
+            }
+
+            showToast(`เพิ่ม "${entry}" ในรายการสำหรับคำนวณแล้ว`, 'success');
+            numberInput.value = ''; 
+            // dateInput.value = ''; // Optionally clear date
+        }
+
+
+        // Modified parseTxtFile function
+        function parseTxtFile(content) {
+            const lines = content.split(/\r?\n/);
+            let outputLines = [];
+            const datePattern = /^\d{1,2}-\d{1,2}-\d{4}=\d+$/; // Validates DD-MM-YYYY=NUMBER
+            const numberOnlyPattern = /^\d+$/;
+
+            lines.forEach(line => {
+                const cleanLine = line.trim();
+                if (datePattern.test(cleanLine)) {
+                    outputLines.push(cleanLine);
+                } else if (numberOnlyPattern.test(cleanLine)) {
+                    outputLines.push(cleanLine);
+                }
+            });
+            return outputLines; // This will be joined by '\n' and put into historyData textarea
+        }
+        
+        // ==================================
+        // END: NEW AND MODIFIED FUNCTIONS 
+
+
+        // File upload functionality
+        document.getElementById('fileUpload').addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (!files.length) return;
+
+            const file = files[0]; 
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                const content = event.target.result;
+                const extension = file.name.split('.').pop().toLowerCase();
+                
+                let processedLines = []; // Will store lines to put in textarea
+                try {
+                    if (extension === 'xlsx' || extension === 'xls') {
+                        // parseExcelFile currently returns just numbers. 
+                        // For DD-MM-YYYY=NUMBER from Excel, parseExcelFile would need significant changes.
+                        // Assuming for now it puts numbers, and user can manually format if needed.
+                        const numbersOnly = parseExcelFile(content); 
+                        processedLines = numbersOnly; // This would be an array of number strings
+                    } else if (extension === 'csv') {
+                        // Similar to Excel, parseCSVFile returns just numbers.
+                        const numbersOnly = parseCSVFile(content);
+                        processedLines = numbersOnly;
+                    } else if (extension === 'txt') {
+                        // parseTxtFile now returns an array of lines (DD-MM-YYYY=NUM or NUM)
+                        processedLines = parseTxtFile(content);
+                    } else {
+                        showToast('ไฟล์ประเภทนี้ไม่รองรับ', 'error');
+                        return;
+                    }
+                    // Join the processed lines and set them to the textarea
+                    document.getElementById('historyData').value = processedLines.join('\n');
+                    showToast(`อัพโหลดและประมวลผลไฟล์ ${file.name} สำเร็จ!`, 'success');
+                } catch (error) {
+                    showToast(`เกิดข้อผิดพลาดในการอ่านไฟล์ ${file.name}: ${error.message}`, 'error');
+                }
+            };
+            
+            if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+                reader.readAsArrayBuffer(file);
+            } else {
+                reader.readAsText(file, 'UTF-8'); // For TXT and CSV
+            }
+            document.getElementById('fileUpload').value = ''; // Reset file input
+        });
+
+        function parseExcelFile(arrayBuffer) { // Returns array of strings (numbers)
+            const workbook = XLSX.read(arrayBuffer, {type: 'array'});
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const data = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+            let parsedNumbers = [];
+            data.forEach(row => {
+                // Assuming the number (or DD-MM-YYYY=NUMBER string) is in the first column
+                if (row[0]) { 
+                    const cellValue = row[0].toString().trim();
+                     // Basic check if it might be our date format or just a number
+                    if (cellValue.match(/^\d{1,2}-\d{1,2}-\d{4}=\d+$/) || cellValue.match(/^\d+$/)) {
+                        parsedNumbers.push(cellValue);
+                    }
+                    // else if (!isNaN(cellValue)) { // If it's just a number string after trim
+                    //    parsedNumbers.push(cellValue);
+                    //}
+                }
+            });
+            return parsedNumbers;
+        }
+
+        function parseCSVFile(content) { // Returns array of strings (numbers or DD-MM-YYYY=NUM)
+            const lines = content.split(/\r?\n/);
+            let parsedEntries = [];
+            lines.forEach(line => {
+                // Assuming the relevant data is in the first column before any comma
+                const firstColumnData = line.split(',')[0].trim(); 
+                if (firstColumnData) {
+                    if (firstColumnData.match(/^\d{1,2}-\d{1,2}-\d{4}=\d+$/) || firstColumnData.match(/^\d+$/)) {
+                       parsedEntries.push(firstColumnData);
+                    }
+                    // else if (!isNaN(firstColumnData)) {
+                    //    parsedEntries.push(firstColumnData);
+                    //}
+                }
+            });
+            return parsedEntries;
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        // Save and load functionality FOR CURRENTLY DISPLAYED RESULTS
+        function saveCurrentResults() {
+            if (currentGeneratedSet.length === 0) {
+                showToast('ไม่มีผลลัพธ์ปัจจุบันให้บันทึก', 'error');
+                return;
+            }
+            
+            const saveData = {
+                id: Date.now(), 
+                timestamp: new Date().toLocaleString('th-TH'),
+                method: currentMethod,
+                numbers: currentGeneratedSet, 
+                settings: {
+                    seed: document.getElementById('seedNumber').value,
+                    digitCount: document.getElementById('digitCount').value,
+                    resultCount: document.getElementById('resultCount').value,
+                    luckNumber: document.getElementById('luckNumber').value
+                }
+            };
+            
+            savedResultsData.unshift(saveData); 
+            localStorage.setItem('savedResultsData', JSON.stringify(savedResultsData));
+            showToast('บันทึกชุดผลลัพธ์ปัจจุบันเรียบร้อย!');
+            updateLotteryHistoryDisplay(); 
+        }
+
+        function loadSavedResults() { 
+            if (savedResultsData.length === 0) {
+                showToast('ไม่มีผลลัพธ์ที่บันทึกไว้', 'error');
+                return;
+            }
+            
+            const latest = savedResultsData[0];
+            currentGeneratedSet = latest.numbers; 
+            displayResults(currentGeneratedSet, latest.method); 
+            
+            document.getElementById('seedNumber').value = latest.settings.seed;
+            document.getElementById('digitCount').value = latest.settings.digitCount;
+            document.getElementById('resultCount').value = latest.settings.resultCount;
+            document.getElementById('luckNumber').value = latest.settings.luckNumber;
+
+            document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.method-btn[data-method="${latest.method}"]`)?.classList.add('active');
+            currentMethod = latest.method;
+            
+            showToast(`โหลดผลลัพธ์ล่าสุด (วิธี: ${getMethodName(latest.method)}) เรียบร้อย!`);
+        }
+
+        function clearAllInputs() {
+            if (confirm('ต้องการล้างข้อมูลที่กรอกและผลลัพธ์บนหน้าจอหรือไม่? (ไม่ลบข้อมูลที่บันทึกถาวร)')) {
+                document.getElementById('seedNumber').value = '123456';
+                document.getElementById('digitCount').value = '6';
+                document.getElementById('resultCount').value = '5';
+                document.getElementById('luckNumber').value = '';
+                document.getElementById('historyData').value = '';
+                document.getElementById('fileUpload').value = ''; // Reset file input name display
+                document.getElementById('results').innerHTML = '';
+                currentGeneratedSet = [];
+                showToast('ล้างข้อมูลบนหน้าจอเรียบร้อย!');
+            }
+        }
+
+        function addNumberToLotteryHistory(numberStr, generationMethod) {
+            const historyItem = {
+                number: numberStr,
+                timestamp: new Date().toLocaleString('th-TH'),
+                method: generationMethod 
+            };
+            lotteryHistory.unshift(historyItem);
+            if (lotteryHistory.length > 200) { 
+                lotteryHistory.pop();
+            }
+            localStorage.setItem('lotteryHistory', JSON.stringify(lotteryHistory));
+        }
+        
+        function updateLotteryHistoryDisplay() {
+            const historyDiv = document.getElementById('historyDisplay');
+            if (savedResultsData.length === 0) {
+                historyDiv.innerHTML = '<p style="text-align: center; color: #666;">ยังไม่มีชุดผลหวยที่บันทึกไว้</p>';
+                return;
+            }
+            
+            historyDiv.innerHTML = savedResultsData.map((itemSet, index) => `
+                <div class="history-item">
+                    <div>
+                        <strong>ชุดผลลัพธ์ ${savedResultsData.length - index} (วิธี: ${getMethodName(itemSet.method)})</strong>
+                        <br><small>ตัวเลข: ${itemSet.numbers.map(n => n.number).join(', ')} | ${itemSet.timestamp}</small>
+                    </div>
+                    <div>
+                        <button class="action-btn load-btn" style="padding: 4px 8px; font-size:0.8rem; margin-right: 5px;" onclick="loadSpecificSavedSet(${itemSet.id})">โหลดชุดนี้</button>
+                        <button class="delete-btn" onclick="deleteSavedSet(${itemSet.id})">ลบ</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function loadSpecificSavedSet(setId) {
+            const setToLoad = savedResultsData.find(item => item.id === setId);
+            if (setToLoad) {
+                currentGeneratedSet = setToLoad.numbers;
+                displayResults(currentGeneratedSet, setToLoad.method);
+
+                document.getElementById('seedNumber').value = setToLoad.settings.seed;
+                document.getElementById('digitCount').value = setToLoad.settings.digitCount;
+                document.getElementById('resultCount').value = setToLoad.settings.resultCount;
+                document.getElementById('luckNumber').value = setToLoad.settings.luckNumber;
+                
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                document.querySelector('.tab[data-tab="generate"]').classList.add('active');
+                document.getElementById('generate').classList.add('active');
+
+                document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector(`.method-btn[data-method="${setToLoad.method}"]`)?.classList.add('active');
+                currentMethod = setToLoad.method;
+
+                showToast(`โหลดชุดผลลัพธ์ (วิธี: ${getMethodName(setToLoad.method)}) เรียบร้อย!`);
+            } else {
+                showToast('ไม่พบชุดผลลัพธ์ที่ต้องการโหลด', 'error');
+            }
+        }
+
+
+        function deleteSavedSet(setId) {
+            const initialLength = savedResultsData.length;
+            savedResultsData = savedResultsData.filter(item => item.id !== setId);
+            if (savedResultsData.length < initialLength) {
+                localStorage.setItem('savedResultsData', JSON.stringify(savedResultsData));
+                updateLotteryHistoryDisplay();
+                showToast('ลบชุดผลลัพธ์ที่บันทึกไว้เรียบร้อย!');
+            }
+        }
+
+
+        function clearLotteryHistory() { 
+            if (confirm('ต้องการล้างประวัติชุดผลหวยที่บันทึกไว้ทั้งหมดหรือไม่?')) {
+                savedResultsData = [];
+                localStorage.removeItem('savedResultsData'); 
+                updateLotteryHistoryDisplay();
+                showToast('ล้างประวัติชุดผลหวยที่บันทึกไว้เรียบร้อย!');
+            }
+        }
+
+        function exportHistory() { 
+            if (savedResultsData.length === 0) {
+                showToast('ไม่มีข้อมูลชุดผลหวยที่บันทึกไว้ให้ Export', 'error');
+                return;
+            }
+            
+            let csvContent = 'IDชุด,วิธีการ,วันที่,จำนวนหลัก,จำนวนชุดที่สร้าง,เลขเมล็ด,เลขมงคล,เลขที่ได้\n';
+            savedResultsData.forEach(itemSet => {
+                const numbersStr = itemSet.numbers.map(n => n.number).join(';'); 
+                csvContent += `${itemSet.id},${getMethodName(itemSet.method)},"${itemSet.timestamp}",${itemSet.settings.digitCount},${itemSet.settings.resultCount},${itemSet.settings.seed},"${itemSet.settings.luckNumber}","${numbersStr}"\n`;
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `หวยเทพAI_ประวัติชุดผลหวย_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            
+            showToast('Export ข้อมูลชุดผลหวยที่บันทึกไว้เรียบร้อย!');
+        }
+
+
+        async function askAI() {
+            const geminiKey = document.getElementById('geminiKey').value;
+            const openaiKey = document.getElementById('openaiKey').value;
+            const model = document.getElementById('aiModel').value;
+            const prompt = document.getElementById('aiPrompt').value;
+            
+            if (!prompt.trim()) {
+                showToast('กรุณากรอกคำถามให้ AI', 'error');
+                return;
+            }
+            
+            if (model === 'gemini' && !geminiKey) {
+                showToast('กรุณากรอก Gemini API Key', 'error');
+                return;
+            }
+            
+            if (model === 'openai' && !openaiKey) {
+                showToast('กรุณากรอก OpenAI API Key', 'error');
+                return;
+            }
+            
+            const aiButton = document.getElementById('aiText');
+            const originalText = aiButton.textContent;
+            aiButton.innerHTML = '<div class="loading"></div> กำลังวิเคราะห์...';
+            
+            try {
+                let response;
+                const historyContext = lotteryHistory.length > 0 ? 
+                    `ข้อมูลประวัติเลขที่เคยสร้าง: ${lotteryHistory.slice(0, 30).map(h => h.number).join(', ')}` : 
+                    'ไม่มีข้อมูลประวัติเลขที่เคยสร้าง';
+                
+                const fullPrompt = `${prompt}\n\nข้อมูลเพิ่มเติม: ${historyContext}`;
+                
+                if (model === 'gemini') {
+                    response = await callGeminiAPI(geminiKey, fullPrompt);
+                } else {
+                    response = await callOpenAIAPI(openaiKey, fullPrompt);
+                }
+                
+                document.getElementById('aiResponse').style.display = 'block';
+                document.getElementById('aiAnswer').innerHTML = formatAIResponse(response);
+                showToast('AI วิเคราะห์เสร็จแล้ว!');
+                
+            } catch (error) {
+                showToast('เกิดข้อผิดพลาดในการเชื่อมต่อ AI: ' + error.message, 'error');
+                document.getElementById('aiResponse').style.display = 'block';
+                document.getElementById('aiAnswer').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            } finally {
+                aiButton.textContent = originalText;
+            }
+        }
+
+        async function callGeminiAPI(apiKey, prompt) {
+             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: prompt
+                        }]
+                    }]
+                })
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: { message: 'Unknown API error structure' } }));
+                throw new Error(`Gemini API Error: ${response.statusText} - ${errorData.error?.message || 'Unknown error'}`);
+            }
+            
+            const data = await response.json();
+            if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0) {
+                return data.candidates[0].content.parts[0].text;
+            } else {
+                if (data.promptFeedback && data.promptFeedback.blockReason){
+                    throw new Error(`Gemini API Error: Content blocked due to ${data.promptFeedback.blockReason}. Safety ratings: ${JSON.stringify(data.promptFeedback.safetyRatings)}`);
+                }
+                if (data.candidates && data.candidates[0] && data.candidates[0].finishReason === "SAFETY") {
+                    throw new Error("Gemini API Error: Content blocked due to safety reasons.");
+                }
+                throw new Error("Gemini API Error: Invalid response structure or no content.");
+            }
+        }
+
+        async function callOpenAIAPI(apiKey, prompt) {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'gpt-4', 
+                    messages: [{
+                        role: 'user',
+                        content: prompt
+                    }],
+                    max_tokens: 1000
+                })
+            });
+            
+            if (!response.ok) {
+                 const errorData = await response.json().catch(() => ({ error: { message: 'Unknown API error structure' } }));
+                throw new Error(`OpenAI API Error: ${response.statusText} - ${errorData.error?.message || 'Unknown error'}`);
+            }
+            
+            const data = await response.json();
+            if (data.choices && data.choices.length > 0 && data.choices[0].message) {
+                return data.choices[0].message.content;
+            } else {
+                 throw new Error("OpenAI API Error: Invalid response structure or no content.");
+            }
+        }
+
+        function formatAIResponse(response) {
+             return response
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>');
+        }
+
+
+        function updateStats() {
+            const statsGrid = document.getElementById('statsGrid');
+            
+            if (lotteryHistory.length === 0) {
+                statsGrid.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1 / -1;">ยังไม่มีข้อมูลสถิติจากเลขที่สร้าง</p>';
+                document.getElementById('frequencyChart').innerHTML = '';
+                return;
+            }
+            
+            const totalNumbers = lotteryHistory.length;
+            const digitFreq = {};
+            const methodCount = {};
+            
+            for (let i=0; i<=9; i++) digitFreq[i.toString()] = 0; 
+
+            lotteryHistory.forEach(item => {
+                item.number.toString().split('').forEach(digit => {
+                    if (digitFreq.hasOwnProperty(digit)) { 
+                       digitFreq[digit]++;
+                    }
+                });
+                methodCount[item.method] = (methodCount[item.method] || 0) + 1;
+            });
+            
+            const mostFrequentDigitEntry = Object.entries(digitFreq).sort((a, b) => b[1] - a[1])[0];
+            const mostUsedMethodEntry = Object.entries(methodCount).sort((a, b) => b[1] - a[1])[0];
+            
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${totalNumbers}</div>
+                    <div>เลขที่สร้างทั้งหมด</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${mostFrequentDigitEntry && mostFrequentDigitEntry[1] > 0 ? mostFrequentDigitEntry[0] : '-'}</div>
+                    <div>เลขที่ออกบ่อยสุด (จากที่สร้าง)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${getMethodName(mostUsedMethodEntry ? mostUsedMethodEntry[0] : '')}</div>
+                    <div>วิธีสร้างที่ใช้มากสุด</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${Object.values(digitFreq).filter(count => count > 0).length}</div>
+                    <div>จำนวนเลขที่แตกต่าง (0-9) ที่สร้างได้</div>
+                </div>
+            `;
+            
+            createFrequencyChart(digitFreq);
+        }
+
+        function createFrequencyChart(digitFreq) {
+            const chartDiv = document.getElementById('frequencyChart');
+            
+            if (Object.keys(digitFreq).length === 0 || Object.values(digitFreq).every(v => v===0) ) {
+                chartDiv.innerHTML = '<p style="text-align: center; color: #666;">ไม่มีข้อมูลความถี่เลข</p>';
+                return;
+            }
+            
+            const maxFreq = Math.max(...Object.values(digitFreq));
+            
+            chartDiv.innerHTML = `
+                <h3>📊 ความถี่ของเลขแต่ละตัว (0-9) จากเลขที่สร้าง</h3>
+                <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px; margin-top: 20px; align-items: end;">
+                    ${Array.from({length: 10}, (_, i) => {
+                        const freq = digitFreq[i.toString()] || 0;
+                        const heightPercentage = maxFreq > 0 ? (freq / maxFreq) * 100 : 0;
+                        return `
+                            <div style="text-align: center;">
+                                <div style="background: linear-gradient(45deg, #667eea, #764ba2); height: ${Math.max(5, heightPercentage*1.5)}px; min-height: 20px; margin-bottom: 5px; border-radius: 4px; display: flex; align-items: end; justify-content: center; color: white; font-size: 12px; padding-bottom: 2px; box-sizing: border-box;">
+                                    ${freq > 0 ? freq : ''}
+                                </div>
+                                <div style="font-weight: bold;">${i}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function getMethodName(methodKey) {
+            const methodNames = {
+                'fibonacci': '🌀 จอมขมังเวทย์',
+                'prime': '🔢 หมอเลข',
+                'statistical': '📊 เทพสถิติ',
+                'pattern': '🔍 เซียนจับทาง',
+                'neural': '🧠 ปัญญาเทพ',
+                'chaos': '🌪️ พลังสุ่มจักรวาล'
+            };
+            return methodNames[methodKey] || methodKey;
+        }
+
+        class LotteryGenerator {
+            constructor() {
+                this.goldenRatio = (1 + Math.sqrt(5)) / 2;
+                this.pi = Math.PI;
+                this.e = Math.E;
+            }
+
+            fibonacci(n, seed) {
+                let fib = [seed % 100, (seed * 7) % 100]; 
+                for (let i = 2; i < n + 10; i++) { 
+                    fib[i] = (fib[i-1] + fib[i-2]) % 100;
+                }
+                return fib.slice(10, n + 10); 
+            }
+
+            isPrime(num) {
+                if (num < 2) return false;
+                for (let i = 2; i <= Math.sqrt(num); i++) {
+                    if (num % i === 0) return false;
+                }
+                return true;
+            }
+
+            generatePrimes(seed, count) {
+                let primes = [];
+                let num = Math.max(2, seed % 100); 
+                while (primes.length < count) {
+                    if (this.isPrime(num)) {
+                        primes.push(num % 100); 
+                    }
+                    num++;
+                    if (num > 10000 && primes.length < count) num = (num % 100) + 2 ; 
+                }
+                return primes;
+            }
+
+            statisticalAnalysis(history, seed, count) {
+                 if (!history || history.length === 0) {
+                    let fallback = [];
+                    let fibSeq = this.fibonacci(count, seed);
+                    for(let i=0; i<count; i++) {
+                        fallback.push((fibSeq[i] + (seed + i*3))%100);
+                    }
+                    return fallback;
+                }
+
+                let digitFreq = {}; 
+                for (let i = 0; i <= 9; i++) digitFreq[i.toString()] = 0.1; 
+
+                history.forEach(numStr => { 
+                    numStr.toString().split('').forEach(digit => {
+                         if (digitFreq.hasOwnProperty(digit)) digitFreq[digit]++;
+                    });
+                });
+
+                let weightedPool = [];
+                for (const digit in digitFreq) {
+                    for (let i = 0; i < Math.round(digitFreq[digit]); i++) {
+                        weightedPool.push(parseInt(digit));
+                    }
+                }
+                 if (weightedPool.length === 0) { 
+                    weightedPool = [0,1,2,3,4,5,6,7,8,9];
+                }
+
+
+                let results = [];
+                for (let i = 0; i < count; i++) {
+                    let d1 = weightedPool[(seed + i * 5) % weightedPool.length];
+                    let d2 = weightedPool[(seed + i * 13 + 1) % weightedPool.length];
+                    results.push((d1 * 10 + d2) % 100); 
+                }
+                return results;
+            }
+
+            patternRecognition(history, seed, count) {
+                if (!history || history.length < 3) { 
+                     return this.fibonacci(count, seed + 10); 
+                }
+                
+                let twoDigitHistory = history.map(n => parseInt(n.toString().slice(-2)) % 100); 
+
+                let patterns = []; 
+                for (let i = 1; i < twoDigitHistory.length; i++) {
+                    let diff = (twoDigitHistory[i] - twoDigitHistory[i-1] + 100) % 100; 
+                    patterns.push(diff);
+                }
+                 if (patterns.length === 0) patterns.push((seed % 20) + 1);
+
+
+                let results = [];
+                let lastNum = twoDigitHistory[twoDigitHistory.length - 1];
+                
+                for (let i = 0; i < count; i++) {
+                    let patternIndex = (seed + i) % patterns.length;
+                    let nextNum = (lastNum + patterns[patternIndex] + (seed % 5) + i) % 100;
+                    results.push(nextNum);
+                    lastNum = nextNum;
+                }
+                return results;
+            }
+
+            neuralNetwork(seed, count) { 
+                let weights = [
+                    Math.sin(seed * 0.112) * 0.7,
+                    Math.cos(seed * 0.234) * 0.5,
+                    Math.tan(seed * 0.045) * 0.3,
+                    (seed % 13) / 13 * 0.2
+                ];
+
+                let results = [];
+                let prevOutput = seed % 100;
+
+                for (let i = 0; i < count; i++) {
+                    let input1 = (seed + i * 17 + prevOutput) % 1000 / 10.0; 
+                    let input2 = (seed * 3 + i * 23 + prevOutput * 2) % 1000 / 10.0;
+
+                    let outputLayer1 = Math.tanh(input1 * weights[0] - input2 * weights[1]);
+                    let outputLayer2 = Math.tanh(input1 * weights[2] + input2 * weights[3] - prevOutput/100 * weights[0]);
+                    
+                    let combinedOutput = (outputLayer1 + outputLayer2 + 2) * 25; 
+                    prevOutput = Math.abs(Math.round(combinedOutput)) % 100;
+                    results.push(prevOutput);
+                }
+                return results;
+            }
+
+            chaosTheory(seed, count) {
+                let x = (seed % 10000) / 10000.0; 
+                let rBase = 3.57 + ( (seed * 13) % 430 ) / 1000.0; 
+                let results = [];
+
+                for (let i = 0; i < count + 20; i++) { 
+                    let r = rBase + Math.sin(i * 0.1 + seed * 0.01) * 0.005; 
+                    x = r * x * (1 - x);
+                    if (x < 0 || x > 1) x = Math.abs(x % 1.0); 
+                    if (i >= 20) { 
+                       results.push(Math.floor(x * 100) % 100); 
+                    }
+                }
+                return results.slice(0, count);
+            }
+
+            generateByMethod(method, seed, digitCount, resultCount, historyNumbers, luckNumbers) {
+                let baseNumbers = []; 
+                
+                let processedHistory = historyNumbers.map(n => n.toString());
+
+                switch(method) {
+                    case 'fibonacci':
+                        baseNumbers = this.fibonacci(resultCount * digitCount, seed);
+                        break;
+                    case 'prime':
+                        baseNumbers = this.generatePrimes(seed, resultCount * digitCount);
+                        break;
+                    case 'statistical':
+                        baseNumbers = this.statisticalAnalysis(processedHistory, seed, resultCount * digitCount);
+                        break;
+                    case 'pattern':
+                        baseNumbers = this.patternRecognition(processedHistory, seed, resultCount * digitCount);
+                        break;
+                    case 'neural':
+                        baseNumbers = this.neuralNetwork(seed, resultCount * digitCount);
+                        break;
+                    case 'chaos':
+                        baseNumbers = this.chaosTheory(seed, resultCount * digitCount);
+                        break;
+                    default:
+                        baseNumbers = this.fibonacci(resultCount * digitCount, seed);
+                }
+                
+                if (baseNumbers.length === 0) { 
+                    for (let i=0; i < resultCount * digitCount; i++) baseNumbers.push(Math.floor(Math.random()*100));
+                }
+
+
+                let finalResults = [];
+                for (let i = 0; i < resultCount; i++) {
+                    let numberStr = '';
+                    for (let j = 0; j < digitCount; j++) {
+                        let baseIndex = (i * digitCount + j);
+                        if (baseNumbers.length === 0) { // Absolute fallback if baseNumbers is still empty
+                             numberStr += Math.floor(Math.random()*10).toString();
+                             continue;
+                        }
+                        baseIndex = baseIndex % baseNumbers.length;
+
+
+                        let segment = baseNumbers[baseIndex]; 
+
+                        let digitToAdd;
+                        if (digitCount === 2) { 
+                           digitToAdd = segment.toString().padStart(2,'0'); 
+                           numberStr += digitToAdd;
+                           break; 
+                        } else if (digitCount === 3) { 
+                            digitToAdd = (segment % 10).toString();
+                        } else { 
+                            if (j % 2 === 0) {
+                                digitToAdd = Math.floor(segment / 10).toString(); 
+                            } else {
+                                digitToAdd = (segment % 10).toString(); 
+                            }
+                        }
+                        
+                        if (luckNumbers.length > 0) {
+                            let luckInfluence = luckNumbers[j % luckNumbers.length];
+                             // Ensure digitToAdd is a single digit before luck influence, if it's not already.
+                            let currentSingleDigit = parseInt(digitToAdd); 
+                            if (isNaN(currentSingleDigit) || currentSingleDigit < 0 || currentSingleDigit > 9) { 
+                                // This case should ideally not happen if logic above is correct for single digit needs
+                                currentSingleDigit = parseInt(digitToAdd.slice(-1)); // take last char if it's multi-char
+                                if(isNaN(currentSingleDigit)) currentSingleDigit = 0; // fallback
+                            }
+                            digitToAdd = ((currentSingleDigit + luckInfluence) % 10).toString();
+                        }
+                        numberStr += digitToAdd;
+                    }
+                    
+                    if (numberStr.length > digitCount) {
+                        numberStr = numberStr.slice(0, digitCount);
+                    }
+                    while (numberStr.length < digitCount) {
+                        let paddingSeed = (seed + numberStr.length * 7);
+                         if (baseNumbers.length === 0) {
+                             numberStr = Math.floor(Math.random()*10).toString() + numberStr;
+                         } else {
+                            paddingSeed = paddingSeed % baseNumbers.length;
+                            numberStr = (baseNumbers[paddingSeed] % 10).toString() + numberStr; 
+                         }
+                    }
+                    
+                    finalResults.push({
+                        number: numberStr,
+                        confidence: this.calculateConfidence(method, baseNumbers, i, digitCount),
+                        method: method
+                    });
+                }
+                return finalResults;
+            }
+
+            calculateConfidence(method, baseNumbers, index, digitCount) {
+                let baseConfidence = {
+                    'fibonacci': 75, 'prime': 70, 'statistical': 85,
+                    'pattern': 80, 'neural': 78, 'chaos': 65
+                };
+                let confidence = baseConfidence[method] || 70;
+
+                let segmentForConfidence = [];
+                if (baseNumbers.length > 0) { // Ensure baseNumbers is not empty
+                    for(let k=0; k < digitCount; k++){
+                        let actualIndex = (index * digitCount + k) % baseNumbers.length;
+                        segmentForConfidence.push(baseNumbers[actualIndex]);
+                    }
+                }
+
+
+                if(segmentForConfidence.length > 0){
+                    let avg = segmentForConfidence.reduce((a,b)=>a+b,0) / segmentForConfidence.length;
+                    let variance = segmentForConfidence.reduce((a,b)=>a + Math.pow(b-avg,2),0) / segmentForConfidence.length;
+                    confidence -= Math.sqrt(variance)/10; 
+                    confidence += (Math.abs(avg-50) < 10 ? 5 : 0); 
+                }
+                
+                return Math.max(50, Math.min(95, Math.round(confidence)));
+            }
+        }
+
+
+        const generator = new LotteryGenerator();
+
+        // Modified generateNumbers function
+        function generateNumbers() {
+            const generateBtn = document.getElementById('generateText');
+            const originalText = generateBtn.textContent;
+            generateBtn.innerHTML = '<div class="loading"></div> กำลังคำนวณ...';
+
+            setTimeout(() => {
+                const seed = parseInt(document.getElementById('seedNumber').value) || Date.now() % 1000000;
+                const digitCount = parseInt(document.getElementById('digitCount').value) || 6;
+                const resultCount = parseInt(document.getElementById('resultCount').value) || 5;
+                const luckNumbersStr = document.getElementById('luckNumber').value;
+
+                let luckNumbers = [];
+                if (luckNumbersStr) {
+                    luckNumbers = luckNumbersStr.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+                }
+
+                let historyForCalc = [];
+                const dataSource = document.getElementById('historicalDataSource').value;
+                const NUM_LATEST_DRAWS_FROM_MANUAL = 10; 
+
+                if (dataSource === 'manual') {
+                    const historyStr = document.getElementById('historyData').value;
+                    if (historyStr.trim() !== "") {
+                        historyForCalc = getHistoryForCalculation(historyStr, NUM_LATEST_DRAWS_FROM_MANUAL);
+                        // console.log("Using history for calculation (latest " + NUM_LATEST_DRAWS_FROM_MANUAL + " from manual input/file):", historyForCalc);
+                    } else {
+                        // console.log("Manual history data is empty.");
+                    }
+                } else if (dataSource === 'saved') {
+                    const numSetsToUse = parseInt(document.getElementById('numSavedSetsToUse').value) || 1;
+                    const relevantSavedSets = savedResultsData.slice(0, numSetsToUse);
+                    relevantSavedSets.forEach(set => {
+                        set.numbers.forEach(numObj => {
+                            historyForCalc.push(numObj.number);
+                        });
+                    });
+                     if(historyForCalc.length === 0 && savedResultsData.length > 0 && relevantSavedSets.length === 0) {
+                        savedResultsData.slice(0,1).forEach(set => { 
+                             set.numbers.forEach(numObj => historyForCalc.push(numObj.number));
+                        });
+                    }
+                    // console.log("Using history for calculation (from saved results):", historyForCalc);
+                }
+                // console.log("Final history for calculation feeding into generator:", historyForCalc);
+
+
+                const generatedSet = generator.generateByMethod(
+                    currentMethod, seed, digitCount, resultCount, historyForCalc, luckNumbers
+                );
+                
+                currentGeneratedSet = generatedSet; 
+                displayResults(generatedSet, currentMethod);
+                
+                generatedSet.forEach(result => {
+                    addNumberToLotteryHistory(result.number, result.method);
+                });
+                updateStats(); 
+                
+                generateBtn.textContent = originalText;
+                showToast('สร้างเลขหวยเรียบร้อย!');
+            }, 100); // Reduced timeout for quicker feedback if preferred
+        }
+
+
+        function displayResults(resultsToDisplay, methodKey) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = ''; 
+
+            const currentMethodName = getMethodName(methodKey);
+
+            const methodDescriptions = {
+                'fibonacci': 'ใช้ลำดับฟีโบนักชีในการสร้างเลข โดยแต่ละเลขเป็นผลรวมของสองเลขก่อนหน้า หรือรูปแบบที่ซับซ้อนกว่านั้น',
+                'prime': 'ใช้จำนวนเฉพาะในการสร้างเลข ซึ่งเป็นจำนวนที่หารด้วยตัวเองและ 1 เท่านั้น มาประกอบกัน',
+                'statistical': 'วิเคราะห์ความถี่ของเลขที่ออกในข้อมูลสถิติที่ให้มา และใช้ข้อมูลนี้ในการพยากรณ์',
+                'pattern': 'ค้นหาแบบแผนจากข้อมูลผลหวยที่ผ่านมา และใช้แบบแผนนี้ในการสร้างเลขใหม่',
+                'neural': 'จำลองการทำงานของโครงข่ายประสาทเทียมอย่างง่าย เพื่อเรียนรู้และสร้างเลขจากข้อมูลป้อนเข้า',
+                'chaos': 'ใช้ทฤษฎีความอลวน (Chaos Theory) ในการสร้างเลขที่ดูเหมือนสุ่มแต่มีระเบียบที่ซ่อนอยู่'
+            };
+
+            let avgConfidence = 0;
+            if (resultsToDisplay.length > 0) {
+                avgConfidence = Math.round(resultsToDisplay.reduce((sum, r) => sum + r.confidence, 0) / resultsToDisplay.length);
+            }
+            
+            const summaryCard = `
+                <div class="result-card" style="grid-column: 1 / -1;">
+                    <h3>🎯 ผลลัพธ์จาก ${currentMethodName}</h3>
+                    <div class="numbers">
+                        ${resultsToDisplay.map(result => `<div class="number">${result.number}</div>`).join('')}
+                    </div>
+                    <div class="confidence">
+                        ค่าความเชื่อมั่นเฉลี่ย: ${avgConfidence}%
+                    </div>
+                    <div class="algorithm-info">
+                        <strong>🔬 วิธีการ:</strong> ${methodDescriptions[methodKey] || 'ไม่พบคำอธิบายสำหรับวิธีนี้'}
+                        <br><strong>⏰ เวลาที่สร้าง:</strong> ${new Date().toLocaleString('th-TH')}
+                    </div>
+                </div>
+            `;
+            resultsDiv.innerHTML += summaryCard;
+
+            resultsToDisplay.forEach((result, index) => {
+                resultsDiv.innerHTML += `
+                    <div class="result-card">
+                        <h3>✨ ชุดที่ ${index + 1}</h3>
+                        <div class="numbers">
+                            <div class="number" style="font-size: 1.5rem; min-width: auto; padding: 15px 20px;">
+                                ${result.number}
+                            </div>
+                        </div>
+                        <div class="confidence">
+                            🎯 ความเชื่อมั่น: ${Math.round(result.confidence)}%
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                            💫 โอกาสดี: ${result.confidence > 80 ? 'สูงมาก' : result.confidence > 70 ? 'สูง' : result.confidence > 60 ? 'ปานกลาง' : 'พอใช้'}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.addEventListener('load', () => {
+            updateLotteryHistoryDisplay(); 
+            updateStats(); 
+            document.getElementById('historicalDataSource').dispatchEvent(new Event('change')); 
+        });
+    </script>
+</body>
+</html>
