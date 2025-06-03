@@ -483,6 +483,79 @@
             .tabs {
                 flex-direction: column;
             }
+
+            .container {
+                padding: 10px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .tab {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .method-btn {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+
+            .input-group label {
+                font-size: 0.9rem;
+            }
+
+            .input-group input, .input-group textarea, .input-group select {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .generate-btn {
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .action-btn {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .results {
+                grid-template-columns: 1fr;
+            }
+
+            .result-card {
+                padding: 20px;
+            }
+
+            .number {
+                padding: 10px 14px;
+                font-size: 1.1rem;
+                min-width: 50px;
+            }
+
+            .ai-badge {
+                padding: 6px 15px;
+                font-size: 0.8rem;
+            }
+
+            .history-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .history-item > div:first-child {
+                margin-bottom: 10px;
+            }
+
+            .history-item button {
+                width: auto; /* Allow buttons to size naturally */
+            }
         }
 
         .toast {
@@ -539,8 +612,11 @@
 
                 <div class="input-section">
                     <div class="input-group">
-                        <label for="seedNumber">🎯 เลขเมล็ด:</label>
-                        <input type="number" id="seedNumber" placeholder="กรอกเลขเมล็ด" value="123456">
+                        <label for="randomNumberMode">🎲 โหมดการสุ่มเลข:</label>
+                        <select id="randomNumberMode">
+                            <option value="normal" selected>ปกติ</option>
+                            <option value="random">แรนด่อม</option>
+                        </select>
                     </div>
                     <div class="input-group">
                         <label for="digitCount">📏 จำนวนหลัก:</label>
@@ -575,6 +651,16 @@
                     <label for="numSavedSetsToUse">🔢 จำนวนชุดผลลัพธ์ที่เคยบันทึกไว้จะนำมาใช้:</label>
                     <input type="number" id="numSavedSetsToUse" min="1" value="5">
                 </div>
+
+                <div class="input-group">
+                    <label for="numDrawsToUse">📅 จำนวนงวดที่ใช้ในการคำนวณ:</label>
+                    <select id="numDrawsToUse">
+                        <option value="10">10 งวดล่าสุด</option>
+                        <option value="20">20 งวดล่าสุด</option>
+                        <option value="30" selected>30 งวดล่าสุด</option>
+                        <option value="all">ทั้งหมด</option>
+                    </select>
+                </div>
                 
                 <div class="input-group">
                     <label for="fileUpload">📁 อัพโหลดไฟล์ผลหวย (TXT, Excel, CSV):</label>
@@ -593,7 +679,180 @@
                         <input type="text" id="manualHistoryNumber" placeholder="กรอกเลขผลหวย" style="flex: 2;">
                         <button onclick="addManualHistoryEntry()" style="padding: 10px 15px;">➕ เพิ่ม</button>
                     </div>
-                    <textarea id="historyData" rows="5" placeholder="กรอกผลหวยที่ผ่านมา แต่ละบรรทัด 1 ผล&#10;เช่น:&#10;22-03-2024=152858&#10;152858&#10;01-03-2024=789012&#10;345678"></textarea>
+                    <textarea id="historyData" rows="8" placeholder="กรอกผลหวยที่ผ่านมา แต่ละบรรทัด 1 ผล&#10;เช่น:&#10;22-03-2024=152858&#10;152858&#10;01-03-2024=789012&#10;345678">02-06-2025=373119
+30-05-2025=325284
+28-05-2025=116374
+26-05-2025=682146
+23-05-2025=892597
+21-05-2025=778789
+19-05-2025=564091
+16-05-2025=023794
+14-05-2025=967985
+12-05-2025=362532
+09-05-2025=738518
+07-05-2025=870827
+05-05-2025=816279
+02-05-2025=234409
+30-04-2025=549591
+28-04-2025=460702
+25-04-2025=905741
+23-04-2025=508112
+21-04-2025=952499
+18-04-2025=265116
+11-04-2025=062011
+09-04-2025=335795
+07-04-2025=528159
+04-04-2025=504445
+02-04-2025=370609
+31-03-2025=556647
+28-03-2025=366845
+26-03-2025=311626
+24-03-2025=018459
+21-03-2025=877289
+19-03-2025=753164
+17-03-2025=255480
+14-03-2025=781177
+12-03-2025=329842
+07-03-2025=445215
+05-03-2025=662160
+03-03-2025=050411
+28-02-2025=602439
+26-02-2025=248994
+24-02-2025=994528
+21-02-2025=496705
+19-02-2025=419681
+17-02-2025=424176
+14-02-2025=294647
+12-02-2025=586045
+10-02-2025=588774
+07-02-2025=220055
+05-02-2025=001810
+03-02-2025=732897
+31-01-2025=414277
+29-01-2025=137970
+27-01-2025=938524
+24-01-2025=083205
+22-01-2025=774361
+20-01-2025=820086
+17-01-2025=992944
+15-01-2025=725381
+13-01-2025=998733
+10-01-2025=081393
+08-01-2025=817449
+06-01-2025=204609
+03-01-2025=472256
+30-12-2024=229265
+27-12-2024=278667
+25-12-2024=449989
+23-12-2024=819285
+20-12-2024=215092
+18-12-2024=923741
+16-12-2024=734601
+13-12-2024=969498
+11-12-2024=939318
+09-12-2024=735457
+06-12-2024=719036
+04-12-2024=846353
+29-11-2024=204493
+27-11-2024=641480
+25-11-2024=167162
+22-11-2024=949497
+20-11-2024=305575
+18-11-2024=402810
+15-11-2024=895136
+13-11-2024=611433
+11-11-2024=475269
+08-11-2024=126347
+06-11-2024=211786
+04-11-2024=367589
+01-11-2024=193851
+30-10-2024=624614
+28-10-2024=465177
+25-10-2024=832002
+23-10-2024=183362
+21-10-2024=542989
+18-10-2024=970741
+16-10-2024=180079
+14-10-2024=998919
+11-10-2024=599692
+09-10-2024=668435
+07-10-2024=980040
+04-10-2024=999636
+02-10-2024=590489
+30-09-2024=032811
+27-09-2024=424821
+25-09-2024=724596
+23-09-2024=492703
+20-09-2024=508644
+18-09-2024=189865
+16-09-2024=233866
+13-09-2024=481647
+28-08-2024=988239
+26-08-2024=388224
+23-08-2024=518254
+21-08-2024=659359
+19-08-2024=709698
+16-08-2024=482076
+14-08-2024=451274
+12-08-2024=989284
+09-08-2024=508431
+07-08-2024=375402
+05-08-2024=611150
+02-08-2024=914005
+31-07-2024=623664
+29-07-2024=094075
+26-07-2024=975048
+24-07-2024=914324
+22-07-2024=056143
+19-07-2024=130517
+17-07-2024=935941
+15-07-2024=287076
+12-07-2024=029065
+10-07-2024=909018
+08-07-2024=842878
+05-07-2024=075056
+03-07-2024=300072
+01-07-2024=249036
+28-06-2024=695514
+26-06-2024=561619
+24-06-2024=564248
+21-06-2024=189106
+19-06-2024=725459
+17-06-2024=291209
+14-06-2024=345059
+12-06-2024=754883
+10-06-2024=737206
+07-06-2024=961732
+05-06-2024=761493
+03-06-2024=881399
+31-05-2024=833303
+29-05-2024=285419
+27-05-2024=779853
+24-05-2024=039057
+22-05-2024=253710
+20-05-2024=590147
+17-05-2024=488717
+15-05-2024=509902
+13-05-2024=383598
+10-05-2024=721155
+08-05-2024=316619
+06-05-2024=191269
+03-05-2024=037999
+29-04-2024=724351
+26-04-2024=968721
+24-04-2024=512552
+22-04-2024=169490
+19-04-2024=764271
+12-04-2024=439432
+10-04-2024=284389
+08-04-2024=239545
+05-04-2024=276804
+03-04-2024=601959
+01-04-2024=731596
+29-03-2024=172420
+27-03-2024=530911
+25-03-2024=768258
+22-03-2024=152858</textarea>
                 </div>
                 <hr style="margin: 20px 0; border-color: rgba(0,0,0,0.1);">
 
@@ -776,7 +1035,9 @@
             const allProcessableItems = [...datedItems, ...nonDatedItems];
 
             let selectedItems;
-            if (numberOfLatestDraws > 0 && allProcessableItems.length > 0) {
+            if (numberOfLatestDraws === 'all') {
+                selectedItems = allProcessableItems;
+            } else if (numberOfLatestDraws > 0 && allProcessableItems.length > 0) {
                 selectedItems = allProcessableItems.slice(0, numberOfLatestDraws);
             } else if (allProcessableItems.length > 0) { // if numberOfLatestDraws is 0 or not positive, use all
                 selectedItems = allProcessableItems;
@@ -827,15 +1088,21 @@
         function parseTxtFile(content) {
             const lines = content.split(/\r?\n/);
             let outputLines = [];
-            const datePattern = /^\d{1,2}-\d{1,2}-\d{4}=\d+$/; // Validates DD-MM-YYYY=NUMBER
+            const datePattern = /^\d{1,2}-\d{1,2}-\d{4}=(\d+)$/; // Validates DD-MM-YYYY=NUMBER
+            const dateSpacePattern = /^(\d{1,2}-\d{1,2}-\d{4})\s+(\d+)$/; // Validates DD-MM-YYYY NUMBER
             const numberOnlyPattern = /^\d+$/;
 
             lines.forEach(line => {
                 const cleanLine = line.trim();
-                if (datePattern.test(cleanLine)) {
+                 if (datePattern.test(cleanLine)) {
                     outputLines.push(cleanLine);
-                } else if (numberOnlyPattern.test(cleanLine)) {
-                    outputLines.push(cleanLine);
+                } else {
+                    const spaceMatch = cleanLine.match(dateSpacePattern);
+                    if (spaceMatch) {
+                        outputLines.push(`${spaceMatch[1]}=${spaceMatch[2]}`); // Convert to DD-MM-YYYY=NUMBER
+                    } else if (numberOnlyPattern.test(cleanLine)) {
+                         outputLines.push(cleanLine);
+                    }
                 }
             });
             return outputLines; // This will be joined by '\n' and put into historyData textarea
@@ -843,7 +1110,6 @@
         
         // ==================================
         // END: NEW AND MODIFIED FUNCTIONS 
-
 
         // File upload functionality
         document.getElementById('fileUpload').addEventListener('change', function(e) {
@@ -857,27 +1123,24 @@
                 const content = event.target.result;
                 const extension = file.name.split('.').pop().toLowerCase();
                 
-                let processedLines = []; // Will store lines to put in textarea
+                let processedLines = []; 
                 try {
                     if (extension === 'xlsx' || extension === 'xls') {
-                        // parseExcelFile currently returns just numbers. 
-                        // For DD-MM-YYYY=NUMBER from Excel, parseExcelFile would need significant changes.
-                        // Assuming for now it puts numbers, and user can manually format if needed.
-                        const numbersOnly = parseExcelFile(content); 
-                        processedLines = numbersOnly; // This would be an array of number strings
+                        processedLines = parseExcelFile(content); 
                     } else if (extension === 'csv') {
-                        // Similar to Excel, parseCSVFile returns just numbers.
-                        const numbersOnly = parseCSVFile(content);
-                        processedLines = numbersOnly;
+                        processedLines = parseCSVFile(content);
                     } else if (extension === 'txt') {
-                        // parseTxtFile now returns an array of lines (DD-MM-YYYY=NUM or NUM)
                         processedLines = parseTxtFile(content);
                     } else {
                         showToast('ไฟล์ประเภทนี้ไม่รองรับ', 'error');
                         return;
                     }
-                    // Join the processed lines and set them to the textarea
-                    document.getElementById('historyData').value = processedLines.join('\n');
+                    const currentTextareaContent = document.getElementById('historyData').value.trim();
+                    if (currentTextareaContent === "" || confirm("ต้องการเขียนทับข้อมูลผลหวยเดิมในช่องกรอกด้วยข้อมูลจากไฟล์หรือไม่?")) {
+                        document.getElementById('historyData').value = processedLines.join('\n');
+                    } else {
+                         document.getElementById('historyData').value += '\n' + processedLines.join('\n');
+                    }
                     showToast(`อัพโหลดและประมวลผลไฟล์ ${file.name} สำเร็จ!`, 'success');
                 } catch (error) {
                     showToast(`เกิดข้อผิดพลาดในการอ่านไฟล์ ${file.name}: ${error.message}`, 'error');
@@ -892,45 +1155,73 @@
             document.getElementById('fileUpload').value = ''; // Reset file input
         });
 
-        function parseExcelFile(arrayBuffer) { // Returns array of strings (numbers)
+        function parseExcelFile(arrayBuffer) { 
             const workbook = XLSX.read(arrayBuffer, {type: 'array'});
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
-            const data = XLSX.utils.sheet_to_json(worksheet, {header: 1});
-            let parsedNumbers = [];
+            const data = XLSX.utils.sheet_to_json(worksheet, {header: 1, raw: false, dateNF:'dd-mm-yyyy'}); // raw:false to get formatted strings, dateNF for dates
+            let parsedEntries = [];
+            const datePattern = /^\d{1,2}-\d{1,2}-\d{4}=(\d+)$/; 
+            const dateSpacePattern = /^(\d{1,2}-\d{1,2}-\d{4})\s+(\d+)$/;
+            const numberOnlyPattern = /^\d+$/;
+
             data.forEach(row => {
-                // Assuming the number (or DD-MM-YYYY=NUMBER string) is in the first column
                 if (row[0]) { 
                     const cellValue = row[0].toString().trim();
-                     // Basic check if it might be our date format or just a number
-                    if (cellValue.match(/^\d{1,2}-\d{1,2}-\d{4}=\d+$/) || cellValue.match(/^\d+$/)) {
-                        parsedNumbers.push(cellValue);
+                    if (datePattern.test(cellValue)) {
+                        parsedEntries.push(cellValue);
+                    } else {
+                        const spaceMatch = cellValue.match(dateSpacePattern);
+                        if (spaceMatch) {
+                           parsedEntries.push(`${spaceMatch[1]}=${spaceMatch[2]}`);
+                        } else if (numberOnlyPattern.test(cellValue)) {
+                            parsedEntries.push(cellValue);
+                        }
+                        // If the cell might be a date object from Excel not yet formatted as string
+                        // you might need more complex date handling here, but XLSX.utils.sheet_to_json with dateNF helps.
                     }
-                    // else if (!isNaN(cellValue)) { // If it's just a number string after trim
-                    //    parsedNumbers.push(cellValue);
-                    //}
-                }
-            });
-            return parsedNumbers;
-        }
-
-        function parseCSVFile(content) { // Returns array of strings (numbers or DD-MM-YYYY=NUM)
-            const lines = content.split(/\r?\n/);
-            let parsedEntries = [];
-            lines.forEach(line => {
-                // Assuming the relevant data is in the first column before any comma
-                const firstColumnData = line.split(',')[0].trim(); 
-                if (firstColumnData) {
-                    if (firstColumnData.match(/^\d{1,2}-\d{1,2}-\d{4}=\d+$/) || firstColumnData.match(/^\d+$/)) {
-                       parsedEntries.push(firstColumnData);
-                    }
-                    // else if (!isNaN(firstColumnData)) {
-                    //    parsedEntries.push(firstColumnData);
-                    //}
+                } else if (row.length > 1 && row[0] === "" && row[1]) { // Potentially date in col 0, number in col 1 if col 0 was just date
+                     // This part is more complex: Excel might treat dates as numbers or date objects.
+                     // And if date is in one cell and number in another.
+                     // For simplicity, current parser expects date=number or number in first cell.
                 }
             });
             return parsedEntries;
         }
+
+
+        function parseCSVFile(content) { 
+            const lines = content.split(/\r?\n/);
+            let parsedEntries = [];
+            const datePattern = /^\d{1,2}-\d{1,2}-\d{4}=(\d+)$/; 
+            const dateSpacePattern = /^(\d{1,2}-\d{1,2}-\d{4})\s+(\d+)$/; // For "DD-MM-YYYY NUMBER"
+            const numberOnlyPattern = /^\d+$/;
+
+            lines.forEach(line => {
+                const parts = line.split(','); // Get first "column"
+                if (parts.length > 0) {
+                    const firstColumnData = parts[0].trim(); 
+                    if (datePattern.test(firstColumnData)) {
+                       parsedEntries.push(firstColumnData);
+                    } else {
+                        const spaceMatch = firstColumnData.match(dateSpacePattern);
+                        if (spaceMatch) {
+                            // If CSV has "DD-MM-YYYY,NUMBER" then parts[0] is date, parts[1] is number.
+                            // If CSV has "DD-MM-YYYY NUMBER" in the first cell itself
+                            parsedEntries.push(`${spaceMatch[1]}=${spaceMatch[2]}`);
+                        } else if (parts.length > 1 && parseDateString(firstColumnData) && numberOnlyPattern.test(parts[1].trim())) {
+                            // Case: "DD-MM-YYYY", "NUMBER"
+                             parsedEntries.push(`${firstColumnData}=${parts[1].trim()}`);
+                        }
+                        else if (numberOnlyPattern.test(firstColumnData)) {
+                           parsedEntries.push(firstColumnData);
+                        }
+                    }
+                }
+            });
+            return parsedEntries;
+        }
+
 
         // Toast notification
         function showToast(message, type = 'success') {
@@ -959,7 +1250,7 @@
                 method: currentMethod,
                 numbers: currentGeneratedSet, 
                 settings: {
-                    seed: document.getElementById('seedNumber').value,
+                    randomNumberMode: document.getElementById('randomNumberMode').value, // MODIFIED
                     digitCount: document.getElementById('digitCount').value,
                     resultCount: document.getElementById('resultCount').value,
                     luckNumber: document.getElementById('luckNumber').value
@@ -982,7 +1273,7 @@
             currentGeneratedSet = latest.numbers; 
             displayResults(currentGeneratedSet, latest.method); 
             
-            document.getElementById('seedNumber').value = latest.settings.seed;
+            document.getElementById('randomNumberMode').value = latest.settings.randomNumberMode || 'normal'; // MODIFIED
             document.getElementById('digitCount').value = latest.settings.digitCount;
             document.getElementById('resultCount').value = latest.settings.resultCount;
             document.getElementById('luckNumber').value = latest.settings.luckNumber;
@@ -996,15 +1287,17 @@
 
         function clearAllInputs() {
             if (confirm('ต้องการล้างข้อมูลที่กรอกและผลลัพธ์บนหน้าจอหรือไม่? (ไม่ลบข้อมูลที่บันทึกถาวร)')) {
-                document.getElementById('seedNumber').value = '123456';
+                document.getElementById('randomNumberMode').value = 'normal'; // MODIFIED
                 document.getElementById('digitCount').value = '6';
                 document.getElementById('resultCount').value = '5';
                 document.getElementById('luckNumber').value = '';
-                document.getElementById('historyData').value = '';
-                document.getElementById('fileUpload').value = ''; // Reset file input name display
+                document.getElementById('numDrawsToUse').value = '30'; // Reset this too
+                // Do not clear historyData by default if it's prefilled
+                // document.getElementById('historyData').value = ''; 
+                document.getElementById('fileUpload').value = ''; 
                 document.getElementById('results').innerHTML = '';
                 currentGeneratedSet = [];
-                showToast('ล้างข้อมูลบนหน้าจอเรียบร้อย!');
+                showToast('ล้างข้อมูลบนหน้าจอเรียบร้อย! (ยกเว้นข้อมูลสถิติเริ่มต้น)');
             }
         }
 
@@ -1048,7 +1341,7 @@
                 currentGeneratedSet = setToLoad.numbers;
                 displayResults(currentGeneratedSet, setToLoad.method);
 
-                document.getElementById('seedNumber').value = setToLoad.settings.seed;
+                document.getElementById('randomNumberMode').value = setToLoad.settings.randomNumberMode || 'normal'; // MODIFIED
                 document.getElementById('digitCount').value = setToLoad.settings.digitCount;
                 document.getElementById('resultCount').value = setToLoad.settings.resultCount;
                 document.getElementById('luckNumber').value = setToLoad.settings.luckNumber;
@@ -1095,13 +1388,13 @@
                 return;
             }
             
-            let csvContent = 'IDชุด,วิธีการ,วันที่,จำนวนหลัก,จำนวนชุดที่สร้าง,เลขเมล็ด,เลขมงคล,เลขที่ได้\n';
+            let csvContent = 'IDชุด,วิธีการ,วันที่,โหมดสุ่ม,จำนวนหลัก,จำนวนชุดที่สร้าง,เลขมงคล,เลขที่ได้\n'; // MODIFIED header
             savedResultsData.forEach(itemSet => {
                 const numbersStr = itemSet.numbers.map(n => n.number).join(';'); 
-                csvContent += `${itemSet.id},${getMethodName(itemSet.method)},"${itemSet.timestamp}",${itemSet.settings.digitCount},${itemSet.settings.resultCount},${itemSet.settings.seed},"${itemSet.settings.luckNumber}","${numbersStr}"\n`;
+                csvContent += `${itemSet.id},${getMethodName(itemSet.method)},"${itemSet.timestamp}",${itemSet.settings.randomNumberMode || 'normal'},${itemSet.settings.digitCount},${itemSet.settings.resultCount},"${itemSet.settings.luckNumber}","${numbersStr}"\n`; // MODIFIED row
             });
             
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); // Added BOM for Excel
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = `หวยเทพAI_ประวัติชุดผลหวย_${new Date().toISOString().split('T')[0]}.csv`;
@@ -1193,6 +1486,9 @@
                 if (data.candidates && data.candidates[0] && data.candidates[0].finishReason === "SAFETY") {
                     throw new Error("Gemini API Error: Content blocked due to safety reasons.");
                 }
+                 if (data.candidates && data.candidates[0] && data.candidates[0].finishReason === "OTHER") {
+                    throw new Error("Gemini API Error: Generation stopped for other reasons.");
+                }
                 throw new Error("Gemini API Error: Invalid response structure or no content.");
             }
         }
@@ -1205,7 +1501,7 @@
                     'Authorization': `Bearer ${apiKey}`
                 },
                 body: JSON.stringify({
-                    model: 'gpt-4', 
+                    model: 'gpt-4', // Or gpt-3.5-turbo if preferred
                     messages: [{
                         role: 'user',
                         content: prompt
@@ -1506,7 +1802,7 @@
                     let numberStr = '';
                     for (let j = 0; j < digitCount; j++) {
                         let baseIndex = (i * digitCount + j);
-                        if (baseNumbers.length === 0) { // Absolute fallback if baseNumbers is still empty
+                        if (baseNumbers.length === 0) { 
                              numberStr += Math.floor(Math.random()*10).toString();
                              continue;
                         }
@@ -1521,23 +1817,31 @@
                            numberStr += digitToAdd;
                            break; 
                         } else if (digitCount === 3) { 
-                            digitToAdd = (segment % 10).toString();
-                        } else { 
-                            if (j % 2 === 0) {
-                                digitToAdd = Math.floor(segment / 10).toString(); 
-                            } else {
-                                digitToAdd = (segment % 10).toString(); 
+                            // For 3 digits, we want 3 single digits. Let's take them from segment or subsequent baseNumbers
+                            if (j === 0) digitToAdd = Math.floor(segment / 10).toString(); // first from segment
+                            else if (j === 1) digitToAdd = (segment % 10).toString(); // second from segment
+                            else { // j === 2, need a new source or reuse logic
+                                let nextBaseIndex = (baseIndex + 1) % baseNumbers.length;
+                                digitToAdd = (baseNumbers[nextBaseIndex] % 10).toString(); 
                             }
+                             if (digitToAdd.length > 1) digitToAdd = digitToAdd.slice(-1); // ensure single digit
+                        } else { // For 6 digits, we want 6 single digits
+                            // This logic ensures each j gets one digit, cycling through baseNumbers if needed.
+                            let currentSegmentValue = baseNumbers[(baseIndex + Math.floor(j/2)) % baseNumbers.length];
+                            if (j % 2 === 0) { // For j = 0, 2, 4
+                                digitToAdd = Math.floor(currentSegmentValue / 10).toString(); 
+                            } else { // For j = 1, 3, 5
+                                digitToAdd = (currentSegmentValue % 10).toString(); 
+                            }
+                             if (digitToAdd.length > 1) digitToAdd = digitToAdd.slice(-1); // ensure single digit
                         }
                         
                         if (luckNumbers.length > 0) {
                             let luckInfluence = luckNumbers[j % luckNumbers.length];
-                             // Ensure digitToAdd is a single digit before luck influence, if it's not already.
                             let currentSingleDigit = parseInt(digitToAdd); 
                             if (isNaN(currentSingleDigit) || currentSingleDigit < 0 || currentSingleDigit > 9) { 
-                                // This case should ideally not happen if logic above is correct for single digit needs
-                                currentSingleDigit = parseInt(digitToAdd.slice(-1)); // take last char if it's multi-char
-                                if(isNaN(currentSingleDigit)) currentSingleDigit = 0; // fallback
+                                currentSingleDigit = parseInt(digitToAdd.slice(-1)); 
+                                if(isNaN(currentSingleDigit)) currentSingleDigit = 0; 
                             }
                             digitToAdd = ((currentSingleDigit + luckInfluence) % 10).toString();
                         }
@@ -1574,10 +1878,14 @@
                 let confidence = baseConfidence[method] || 70;
 
                 let segmentForConfidence = [];
-                if (baseNumbers.length > 0) { // Ensure baseNumbers is not empty
-                    for(let k=0; k < digitCount; k++){
-                        let actualIndex = (index * digitCount + k) % baseNumbers.length;
-                        segmentForConfidence.push(baseNumbers[actualIndex]);
+                if (baseNumbers.length > 0) { 
+                    for(let k=0; k < digitCount; k++){ // Iterate up to digitCount to get relevant parts
+                        let actualBaseNumberIndex = (index * Math.ceil(digitCount / 2) + Math.floor(k/2) ) % baseNumbers.length; 
+                        // This index tries to map more closely to how numbers are formed for 6-digit
+                        // For 2-digit, it will be index % baseNumbers.length essentially for the pair.
+                        // For 3-digit, it's more complex.
+                        // A simpler confidence would just use baseNumbers[index % baseNumbers.length]
+                        segmentForConfidence.push(baseNumbers[actualBaseNumberIndex]);
                     }
                 }
 
@@ -1585,8 +1893,8 @@
                 if(segmentForConfidence.length > 0){
                     let avg = segmentForConfidence.reduce((a,b)=>a+b,0) / segmentForConfidence.length;
                     let variance = segmentForConfidence.reduce((a,b)=>a + Math.pow(b-avg,2),0) / segmentForConfidence.length;
-                    confidence -= Math.sqrt(variance)/10; 
-                    confidence += (Math.abs(avg-50) < 10 ? 5 : 0); 
+                    confidence -= Math.sqrt(variance)/ (digitCount > 2 ? 5 : 10) ; // Adjust variance impact
+                    confidence += (Math.abs(avg-50) < (digitCount > 2 ? 20 : 10) ? 5 : 0); 
                 }
                 
                 return Math.max(50, Math.min(95, Math.round(confidence)));
@@ -1603,7 +1911,14 @@
             generateBtn.innerHTML = '<div class="loading"></div> กำลังคำนวณ...';
 
             setTimeout(() => {
-                const seed = parseInt(document.getElementById('seedNumber').value) || Date.now() % 1000000;
+                const randomNumberMode = document.getElementById('randomNumberMode').value; // MODIFIED
+                let seed;
+                if (randomNumberMode === 'random') {
+                    seed = Date.now() % 1000000;
+                } else { // 'normal'
+                    seed = 123456; // Fixed seed for normal mode
+                }
+
                 const digitCount = parseInt(document.getElementById('digitCount').value) || 6;
                 const resultCount = parseInt(document.getElementById('resultCount').value) || 5;
                 const luckNumbersStr = document.getElementById('luckNumber').value;
@@ -1615,15 +1930,13 @@
 
                 let historyForCalc = [];
                 const dataSource = document.getElementById('historicalDataSource').value;
-                const NUM_LATEST_DRAWS_FROM_MANUAL = 10; 
+                const numDrawsToUse = document.getElementById('numDrawsToUse').value; // Get selected number of draws
+                let limitDraws = numDrawsToUse === 'all' ? 0 : parseInt(numDrawsToUse); // Use 0 for 'all' to indicate no limit
 
                 if (dataSource === 'manual') {
                     const historyStr = document.getElementById('historyData').value;
                     if (historyStr.trim() !== "") {
-                        historyForCalc = getHistoryForCalculation(historyStr, NUM_LATEST_DRAWS_FROM_MANUAL);
-                        // console.log("Using history for calculation (latest " + NUM_LATEST_DRAWS_FROM_MANUAL + " from manual input/file):", historyForCalc);
-                    } else {
-                        // console.log("Manual history data is empty.");
+                        historyForCalc = getHistoryForCalculation(historyStr, limitDraws);
                     }
                 } else if (dataSource === 'saved') {
                     const numSetsToUse = parseInt(document.getElementById('numSavedSetsToUse').value) || 1;
@@ -1634,15 +1947,17 @@
                         });
                     });
                      if(historyForCalc.length === 0 && savedResultsData.length > 0 && relevantSavedSets.length === 0) {
+                        // Fallback to use at least one saved set if input is 0 but data exists
                         savedResultsData.slice(0,1).forEach(set => { 
                              set.numbers.forEach(numObj => historyForCalc.push(numObj.number));
                         });
                     }
-                    // console.log("Using history for calculation (from saved results):", historyForCalc);
+                     // Apply the numDrawsToUse limit to historyForCalc if it came from saved data
+                    if (limitDraws > 0) {
+                        historyForCalc = historyForCalc.slice(0, limitDraws);
+                    }
                 }
-                // console.log("Final history for calculation feeding into generator:", historyForCalc);
-
-
+                
                 const generatedSet = generator.generateByMethod(
                     currentMethod, seed, digitCount, resultCount, historyForCalc, luckNumbers
                 );
@@ -1657,7 +1972,7 @@
                 
                 generateBtn.textContent = originalText;
                 showToast('สร้างเลขหวยเรียบร้อย!');
-            }, 100); // Reduced timeout for quicker feedback if preferred
+            }, 100); 
         }
 
 
