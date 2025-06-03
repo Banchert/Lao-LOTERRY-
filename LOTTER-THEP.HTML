@@ -483,6 +483,79 @@
             .tabs {
                 flex-direction: column;
             }
+
+            .container {
+                padding: 10px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .tab {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .method-btn {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+
+            .input-group label {
+                font-size: 0.9rem;
+            }
+
+            .input-group input, .input-group textarea, .input-group select {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .generate-btn {
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .action-btn {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .results {
+                grid-template-columns: 1fr;
+            }
+
+            .result-card {
+                padding: 20px;
+            }
+
+            .number {
+                padding: 10px 14px;
+                font-size: 1.1rem;
+                min-width: 50px;
+            }
+
+            .ai-badge {
+                padding: 6px 15px;
+                font-size: 0.8rem;
+            }
+
+            .history-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .history-item > div:first-child {
+                margin-bottom: 10px;
+            }
+
+            .history-item button {
+                width: auto; /* Allow buttons to size naturally */
+            }
         }
 
         .toast {
@@ -577,6 +650,16 @@
                 <div class="input-group" id="savedSetsOptions" style="display: none;">
                     <label for="numSavedSetsToUse">🔢 จำนวนชุดผลลัพธ์ที่เคยบันทึกไว้จะนำมาใช้:</label>
                     <input type="number" id="numSavedSetsToUse" min="1" value="5">
+                </div>
+
+                <div class="input-group">
+                    <label for="numDrawsToUse">📅 จำนวนงวดที่ใช้ในการคำนวณ:</label>
+                    <select id="numDrawsToUse">
+                        <option value="10">10 งวดล่าสุด</option>
+                        <option value="20">20 งวดล่าสุด</option>
+                        <option value="30" selected>30 งวดล่าสุด</option>
+                        <option value="all">ทั้งหมด</option>
+                    </select>
                 </div>
                 
                 <div class="input-group">
@@ -952,7 +1035,9 @@
             const allProcessableItems = [...datedItems, ...nonDatedItems];
 
             let selectedItems;
-            if (numberOfLatestDraws > 0 && allProcessableItems.length > 0) {
+            if (numberOfLatestDraws === 'all') {
+                selectedItems = allProcessableItems;
+            } else if (numberOfLatestDraws > 0 && allProcessableItems.length > 0) {
                 selectedItems = allProcessableItems.slice(0, numberOfLatestDraws);
             } else if (allProcessableItems.length > 0) { // if numberOfLatestDraws is 0 or not positive, use all
                 selectedItems = allProcessableItems;
@@ -1206,6 +1291,7 @@
                 document.getElementById('digitCount').value = '6';
                 document.getElementById('resultCount').value = '5';
                 document.getElementById('luckNumber').value = '';
+                document.getElementById('numDrawsToUse').value = '30'; // Reset this too
                 // Do not clear historyData by default if it's prefilled
                 // document.getElementById('historyData').value = ''; 
                 document.getElementById('fileUpload').value = ''; 
@@ -1844,12 +1930,13 @@
 
                 let historyForCalc = [];
                 const dataSource = document.getElementById('historicalDataSource').value;
-                const NUM_LATEST_DRAWS_FROM_MANUAL = 20; // Increased for more data if available
+                const numDrawsToUse = document.getElementById('numDrawsToUse').value; // Get selected number of draws
+                let limitDraws = numDrawsToUse === 'all' ? 0 : parseInt(numDrawsToUse); // Use 0 for 'all' to indicate no limit
 
                 if (dataSource === 'manual') {
                     const historyStr = document.getElementById('historyData').value;
                     if (historyStr.trim() !== "") {
-                        historyForCalc = getHistoryForCalculation(historyStr, NUM_LATEST_DRAWS_FROM_MANUAL);
+                        historyForCalc = getHistoryForCalculation(historyStr, limitDraws);
                     }
                 } else if (dataSource === 'saved') {
                     const numSetsToUse = parseInt(document.getElementById('numSavedSetsToUse').value) || 1;
@@ -1864,6 +1951,10 @@
                         savedResultsData.slice(0,1).forEach(set => { 
                              set.numbers.forEach(numObj => historyForCalc.push(numObj.number));
                         });
+                    }
+                     // Apply the numDrawsToUse limit to historyForCalc if it came from saved data
+                    if (limitDraws > 0) {
+                        historyForCalc = historyForCalc.slice(0, limitDraws);
                     }
                 }
                 
